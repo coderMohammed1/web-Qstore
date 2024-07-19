@@ -24,6 +24,9 @@ add constraint rolescons check(roles = 's' or roles = 'c');
 alter table users
 add column isactive boolean;
 
+alter table users 
+modify column isactive int default 0; 
+
 alter table users
 add column email varchar(70) unique;
 
@@ -105,3 +108,5 @@ alter table seller
 add constraint sellfk foreign key(seller_id) references users(ID);
 
 alter table users drop column userName;
+alter table users add column iscomplete boolean default 0;
+alter table users add column token varchar(500) unique;

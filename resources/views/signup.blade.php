@@ -53,7 +53,13 @@
                 {{ $error }} <!-- Display the error message -->
             </div>
     @endif
-    <script src="assets/js/signup.js"></script>
+
+    @if(isset($succsess))
+            <div id="alert" class="alert alert-success">
+                {{ $succsess }} <!-- Display the error message -->
+            </div>
+    @endif
+    {{-- <script src="assets/js/signup.js"></script> --}}
     <script>
         alert("Password: allowed symbols: 0-9 and a-z and A-Z and @ and # and _. Your password should contain 8 or more characters and at least: one capital letter, one small letter, and one number.");
     </script>

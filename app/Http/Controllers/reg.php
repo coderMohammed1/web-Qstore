@@ -2,18 +2,28 @@
 namespace App\Http\Controllers;
 
 use PDO;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use \Illuminate\Support\Facades\Mail;
+use \Illuminate\Support\Facades\Queue;
+use App\Mail\mailer;
 
 class reg extends BaseController
 {
+
     use AuthorizesRequests, ValidatesRequests;
+    static function generateRandomString($length = 16) {
+        return bin2hex(random_bytes($length / 2));
+    }
+
+    //GET
     function signUser(){
         return view("signup");
     }
 
-    //post
+    //POST
     function register(){
         if(isset($_POST["reg_sub"])){
             $database = new PDO("mysql:host=127.0.0.1:8888; dbname=qshop;", config("dbenv.dbuname"), config("dbenv.dbpass"));
@@ -58,8 +68,51 @@ class reg extends BaseController
 
                 return view("signup")->with("error","Invalid data!");
             }else{
-                return "coorect";
+                $token = Hash::make(reg::generateRandomString(35));
+                $AddUser = $database->prepare("INSERT INTO users(First_Name,Last_name,roles,birthdate,password,email,token) VALUES(:name,:lname,:role,:age,:pass,:em,:token)");
+                $AddUser->bindParam("name",$name);
+
+                $AddUser->bindParam("lname",$lname);
+                $AddUser->bindParam("role",$role);
+                $AddUser->bindParam("token",$token);
+
+                $AddUser->bindParam("age",$age);
+                $AddUser->bindValue("pass",Hash::make($password2));
+                $AddUser->bindParam("em",$email);
+
+                $checkActi = $database->prepare("SELECT isactive FROM users WHERE email = :em"); // this to check if the email is already there but not activated!
+                $checkActi->bindParam("em",$email);
+
+                if($checkActi->execute()){       
+                    $checkActio = $checkActi->fetchObject();
+                    if($checkActio){
+                        if($checkActi->rowCount() != 0 and $checkActio->isactive == 0){
+                            $delem = $database->prepare("DELETE FROM users WHERE email = :em");
+                            $delem->bindParam("em",$email);
+    
+                            if(!$delem->execute()){
+                                return view("signup")->with("error","somthing went wrong!");
+                            }
+                            
+                        }
+                    }
+                    
+                    if($checkActi->rowCount() != 0){
+                        if($checkActio and $checkActio->isactive == 1){
+                            return view("signup")->with("error","this email is already active!");
+                        }
+                    }
+
+                    if($AddUser->execute()){
+                        Mail::to($email)->send(new mailer($token,$email));
+                        return view("signup")->with("succsess","DONE, pleas check your email!");
+                    }else{
+                        return view("signup")->with("error","somthing went wrong!");
+                    }
+                }
+                }
+                // now I will make a page for the user to complete his data after the activation!
+                return view("signup")->with("error","somthing went wrong!, pleas try again");
             }
     }
-}
 }
