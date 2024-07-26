@@ -26,7 +26,7 @@ class reg extends BaseController
     //POST
     function register(){
         if(isset($_POST["reg_sub"])){
-            $database = new PDO("mysql:host=127.0.0.1:8888; dbname=qshop;", config("dbenv.dbuname"), config("dbenv.dbpass"));
+            $database = new PDO("mysql:host=".config("dbenv.dbhost")."; dbname=".config("dbenv.dbname").";", config("dbenv.dbuname"), config("dbenv.dbpass"));
 
             $pattern = '/^[0-9a-zA-Z_@#]+$/';
             $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -68,7 +68,7 @@ class reg extends BaseController
 
                 return view("signup")->with("error","Invalid data!");
             }else{
-                $token = Hash::make(reg::generateRandomString(35));
+                $token = Hash::make(reg::generateRandomString(35).$email);
                 $AddUser = $database->prepare("INSERT INTO users(First_Name,Last_name,roles,birthdate,password,email,token) VALUES(:name,:lname,:role,:age,:pass,:em,:token)");
                 $AddUser->bindParam("name",$name);
 
@@ -105,7 +105,7 @@ class reg extends BaseController
 
                     if($AddUser->execute()){
                         Mail::to($email)->send(new mailer($token,$email));
-                        return view("signup")->with("succsess","DONE, pleas check your email!");
+                        return view("signup")->with("succsess","Pleas check your email!");
                     }else{
                         return view("signup")->with("error","somthing went wrong!");
                     }

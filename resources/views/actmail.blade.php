@@ -61,7 +61,7 @@
         <div class="content">
             <p>Hi!</p>
             <p>Thank you for registering with us! To complete your registration and activate your account, please click the button below:</p>
-            <a href="{{ url('127.0.0.1:8000/activate?email='.$email.'&token=' . $token) }}">Activate Your Account</a>
+            <a href="{{ url('http://127.0.0.1:8000/activate?token=' . $token) }}">Activate Your Account</a>
             <p>If you did not create an account, no further action is required.</p>
         </div>
         <div class="footer">

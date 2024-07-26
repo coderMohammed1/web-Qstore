@@ -107,6 +107,11 @@ total_sales decimal(15,3)
 alter table seller
 add constraint sellfk foreign key(seller_id) references users(ID);
 
+alter table seller
+modify column total_sales decimal(15,3) default 0.000; 
+--------------------------------------------------------------
 alter table users drop column userName;
-alter table users add column iscomplete boolean default 0;
 alter table users add column token varchar(500) unique;
+------------------------------------------------------
+
+select * from users;
