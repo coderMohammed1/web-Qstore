@@ -14,7 +14,7 @@
     </style>
 </head>
 <body>
-    <?php require_once 'nav.php'; ?>
+    @include("nav")
 
     @if(isset($token) and $token->roles == "c")
         <div class="container">

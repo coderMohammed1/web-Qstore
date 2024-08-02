@@ -63,6 +63,12 @@ foreign key(seller) references users(ID)
 alter table product
 add constraint ppricecons check(price>=0.00);
 
+alter table product 
+add column description text not null;
+
+alter table product 
+add column img MEDIUMBLOB not null;
+
 -- many to many
 create table cart_products(
 ID int primary key auto_increment,
@@ -90,7 +96,6 @@ alter table users drop column shipping_info;
 -------------------------------------------------------------------------------------------
 create table customer(
 cust_id int unique,
--- shipping info
 city varchar(55),
 street varchar(55),
 country varchar (50)
@@ -113,5 +118,4 @@ modify column total_sales decimal(15,3) default 0.000;
 alter table users drop column userName;
 alter table users add column token varchar(500) unique;
 ------------------------------------------------------
-
-select * from users;
+select * from product;

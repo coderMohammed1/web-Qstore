@@ -13,14 +13,12 @@ class mailer extends Mailable
 {
     use Queueable, SerializesModels;
     public $token;
-    public $email;
     /**
      * Create a new message instance.
      */
-    public function __construct($token,$email)
+    public function __construct($token)
     {
         $this->token = $token;
-        $this->email = $email;
     }
 
     /**
@@ -39,7 +37,7 @@ class mailer extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'actmail', with: ['token' => $this->token,'email' => $this->email]
+            view: 'actmail', with: ['token' => $this->token]
         );
     }
 

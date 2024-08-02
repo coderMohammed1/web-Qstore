@@ -32,7 +32,7 @@ class reg extends BaseController
             $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
             $name =  htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
             
-            $lname = htmlspecialchars($_POST['lname'], ENT_QUOTES, 'UTF-8');;
+            $lname = htmlspecialchars($_POST['lname'], ENT_QUOTES, 'UTF-8');
             $password2 = $_POST["password"];
 
             $age = $_POST["age"];
@@ -104,7 +104,7 @@ class reg extends BaseController
                     }
 
                     if($AddUser->execute()){
-                        Mail::to($email)->send(new mailer($token,$email));
+                        Mail::to($email)->send(new mailer($token));
                         return view("signup")->with("succsess","Pleas check your email!");
                     }else{
                         return view("signup")->with("error","somthing went wrong!");

@@ -15,7 +15,7 @@
     </style>
 </head>
 <body>    
-   <?php require_once 'nav.php'; ?>
+    @include("nav")
    
    @if(isset($error))
    <div id="alert" class="alert alert-danger mx-auto w-50">

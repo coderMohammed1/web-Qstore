@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <?php require_once 'nav.php'; ?>
+    @include("nav")
     <div class="container">
         <form id="sig" action="/register" method="POST">
             @csrf
@@ -44,7 +44,7 @@
             <div id = "customerf"></div>
             <br>
             <button class="btn btn-outline-dark" type="submit" name="reg_sub" id="mo">Register</button>
-            <a class="btn btn-outline-success" href="https://192.168.1.12/revesion02/login.php">Sign in instead</a>
+            <a class="btn btn-outline-success" href="{{config('general.url2')}}/signin">Sign in instead</a>
         </form>
     </div>
 
