@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return "<h1>Welcome to the Qstore!</h1>";
+    return view("index");
 });
 
 //sign up routes
