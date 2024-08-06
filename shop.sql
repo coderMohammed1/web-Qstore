@@ -118,4 +118,3 @@ modify column total_sales decimal(15,3) default 0.000;
 alter table users drop column userName;
 alter table users add column token varchar(500) unique;
 ------------------------------------------------------
-select * from product;

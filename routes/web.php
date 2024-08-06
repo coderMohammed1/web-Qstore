@@ -26,3 +26,8 @@ Route::get("/customers","\App\Http\Controllers\\customer@main");
 // seller routes
 Route::get("/seller","\App\Http\Controllers\\seller@main");
 Route::post("/seller","\App\Http\Controllers\\seller@add");
+
+// test
+Route::get("/test",function(){
+    return view("test");
+});
