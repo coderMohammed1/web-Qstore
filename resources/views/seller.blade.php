@@ -37,7 +37,7 @@
         <form action="/seller" method="post" enctype="multipart/form-data"> 
             @csrf
             <label  class="form-label" for="">Product name:</label>
-            <input required type="text"  class="form-control" name="pname" id="">
+            <input required type="text"  class="form-control" name="pname" id="" autocomplete="off">
             <label  class="form-label" for="">Price:</label>
 
             <input required  class="form-control" type="number" name="price">

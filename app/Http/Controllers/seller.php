@@ -49,7 +49,7 @@ class seller extends BaseController
 
              $allowedExtensions = array("jpg", "jpeg", "png", "gif","bmp", "tiff", "tif", "webp", "svg", "ico", "heic", "heif", "jfif", "psd", "raw", "eps", "ai", "cdr");
 
-             $prod = self::$database->prepare("INSERT INTO product(p_name,price,Manfacturer,seller,description,img) VALUES(:pname,:price,:manufact,:seller,:dsc,:img)");
+             $prod = self::$database->prepare("INSERT INTO product(p_name,price,Manfacturer,seller,description,img,type) VALUES(:pname,:price,:manufact,:seller,:dsc,:img,:ty)");
              $prod->bindValue("pname",htmlspecialchars($_POST['pname'], ENT_QUOTES, 'UTF-8'));
 
              $prod->bindValue("price",htmlspecialchars($_POST['price'], ENT_QUOTES, 'UTF-8'));
@@ -59,13 +59,14 @@ class seller extends BaseController
              $prod->bindValue("dsc",htmlspecialchars($_POST['desc'], ENT_QUOTES, 'UTF-8'));
 
              if (in_array(strtolower(pathinfo($_FILES["img"]['name'], PATHINFO_EXTENSION)), $allowedExtensions)){
-                $prod->bindValue("img",file_get_contents($_FILES["img"]['tmp_name']));
+                    $prod->bindValue("img",file_get_contents($_FILES["img"]['tmp_name']));
+                    $prod->bindParam("ty",$_FILES["img"]["type"]);
 
-                if($prod->execute()){
-                    return view("seller")->with("succsess","Your product has been added!");
-                }else{
-                    return view("seller")->with("error","Somthing went wrong!");
-                }
+                    if($prod->execute()){
+                        return view("seller")->with("succsess","Your product has been added!");
+                    }else{
+                        return view("seller")->with("error","Somthing went wrong!");
+                    }
              }else{
                 return view("error")->with("error","You are not authriezed!");
              }

@@ -28,6 +28,11 @@ Route::get("/seller","\App\Http\Controllers\\seller@main");
 Route::post("/seller","\App\Http\Controllers\\seller@add");
 
 // test
-Route::get("/test",function(){
-    return view("test");
-});
+// Route::get("/test",function(){
+//     return view("test");
+// });
+
+
+// product/description
+Route::post("/product/description","\App\Http\Controllers\\description@read");
+Route::get("/product/description","\App\Http\Controllers\\description@main");

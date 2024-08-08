@@ -7,12 +7,11 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 
-class customer extends BaseController
+class description extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    protected static $database;
-
+    public static $database;
     public function __construct()
     {
         if (self::$database === null) {
@@ -26,17 +25,20 @@ class customer extends BaseController
     }
 
     function main(){
+        return view("error")->with("error","sorry but you can not view this data!");
+    }
+    
+    function read(){
         session_start();
 
-        if(isset($_SESSION["info"]) and $_SESSION["info"]->roles == "c"){ 
+        if(isset($_POST["descr"]) and isset($_SESSION["info"]) and $_SESSION["info"]->roles == "c"){
+            $product = self::$database->prepare("SELECT * FROM product JOIN users ON product.seller = users.ID AND product.ID = :id");
+            $product->bindParam(":id",$_POST["descr"]);
 
-            $data = self::$database->prepare("SELECT img,type,p_name,price,ID FROM product ORDER BY ID DESC LIMIT 30");
-            
-            if($data->execute()){
-                $results = $data->fetchAll(PDO::FETCH_ASSOC);
-                return view("customer")->with("data",$results);
+            if($product->execute()){
+                return view("description")->with("product",$product->fetchObject());
             }else{
-                return view("error")->with("error","somthing went wrong!");
+                return view("error")->with("error","Somthing went wrong!");
             }
         }else{
             return redirect("/signin");
