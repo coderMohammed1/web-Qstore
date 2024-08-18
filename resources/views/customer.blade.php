@@ -10,13 +10,23 @@
         #alert {
             text-align: center !important;
             margin-top: 20px;
-            
+             
         }
     </style>
 </head>
 <body>
     @include("nav")
-    <main id = 'main' style='display: flex; flex-wrap: wrap; margin-left: 7%;'>
+    <div class="container mb-2" >
+        <form  method="post">
+            @csrf
+            <label class="form-label mt-4 ">SEARCH:</label>
+            <input class="form-control " type="text" name="search" placeholder="product or Manfacturer name:" required/>
+            <button class="btn btn-dark mt-1 w-100" type="submit" name="send01">search</button>
+            <a class="btn btn-info mt-1 w-100" href="/customers">Back!</a>
+        </form>
+    </div>
+
+    <main id = 'main' style='display: flex; flex-wrap: wrap;'>
         @foreach ($data as $product)
             <div style="width: 300px; margin-left: 15px; margin-top: 4px; border: 2px blue solid; margin-bottom:7px">
 
@@ -47,6 +57,8 @@
                 </form>           
             </div>
         @endforeach
+        
     </main>
 </body>
+<script src="/assets/js/customer.js"></script>
 </html>

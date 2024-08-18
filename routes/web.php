@@ -21,7 +21,7 @@ Route::post("/signin","\App\Http\Controllers\\signin@signuser");
 
 //customers routes
 Route::get("/customers","\App\Http\Controllers\\customer@main");
-
+Route::post("/customers","\App\Http\Controllers\\customer@search");
 
 // seller routes
 Route::get("/seller","\App\Http\Controllers\\seller@main");
@@ -36,3 +36,12 @@ Route::post("/seller","\App\Http\Controllers\\seller@add");
 // product/description
 Route::post("/product/description","\App\Http\Controllers\\description@read");
 Route::get("/product/description","\App\Http\Controllers\\description@main");
+
+//logout
+Route::get("/logout",function(){
+    session_start();
+    session_destroy();
+
+    session_unset();
+    return redirect("/signin");
+});

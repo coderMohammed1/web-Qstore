@@ -44,6 +44,9 @@
             <li class="nav-item">
               <a class="nav-link active" href="{{ config('general.url2') }}/">Home Page</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/logout">logout</a>
+            </li>
           </ul>
         </div>
       </div>

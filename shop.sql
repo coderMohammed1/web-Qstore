@@ -69,6 +69,8 @@ add column description text not null;
 alter table product 
 add column img MEDIUMBLOB not null;
 
+CREATE INDEX pname ON product(p_name);
+CREATE INDEX man ON product(Manfacturer);
 -- many to many
 create table cart_products(
 ID int primary key auto_increment,
@@ -117,4 +119,6 @@ modify column total_sales decimal(15,3) default 0.000;
 --------------------------------------------------------------
 alter table users drop column userName;
 alter table users add column token varchar(500) unique;
+------------------------------------------------------
+alter table product add column type varchar(15) not null;
 ------------------------------------------------------
