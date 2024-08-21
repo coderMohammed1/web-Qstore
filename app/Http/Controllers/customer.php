@@ -64,5 +64,9 @@ class customer extends BaseController
             return redirect("/signin");
         }
     }
+
+    function addTocart(){
+        
+    }
   
 }

@@ -80,6 +80,7 @@ foreign key(cart) references cart(ID),
 foreign key(product) references product(ID)
 )auto_increment = 1;
 
+alter table cart_products add column quantity INT default 1 NOT NULL;
 
 -- many to many
 create table Order_Product(
@@ -106,6 +107,9 @@ country varchar (50)
 alter table customer
 add constraint custfk foreign key(cust_id) references users(ID);
 
+alter table customer add column cart INT;
+alter table customer add constraint cartfk foreign key(cart) references cart(ID);
+
 create table seller(
 seller_id int unique,
 total_sales decimal(15,3)
@@ -122,3 +126,4 @@ alter table users add column token varchar(500) unique;
 ------------------------------------------------------
 alter table product add column type varchar(15) not null;
 ------------------------------------------------------
+select * from cart;

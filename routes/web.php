@@ -22,6 +22,7 @@ Route::post("/signin","\App\Http\Controllers\\signin@signuser");
 //customers routes
 Route::get("/customers","\App\Http\Controllers\\customer@main");
 Route::post("/customers","\App\Http\Controllers\\customer@search");
+Route::post("/customers/add","\App\Http\Controllers\\customer@addTocart");
 
 // seller routes
 Route::get("/seller","\App\Http\Controllers\\seller@main");
@@ -45,3 +46,6 @@ Route::get("/logout",function(){
     session_unset();
     return redirect("/signin");
 });
+
+//cart
+Route::get("/cart","\App\Http\Controllers\\cart@main");

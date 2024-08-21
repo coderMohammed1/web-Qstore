@@ -47,6 +47,7 @@ class signin extends BaseController
                     if($user->isactive == 1){
                         $_SESSION["info"] = $user; // logs the user in
                         if($user->roles == "c"){
+                            // retrive other data from the customer table!
                             return redirect("/customers");
                         }else{
                             return redirect("/seller");

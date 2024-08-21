@@ -54,32 +54,49 @@ class Activate extends BaseController
             $comp->bindParam("token",$_POST["complete"]);
 
             if($comp->execute()){
+                
                 $comp = $comp->fetchObject();
 
-                $city = htmlspecialchars($_POST['city'], ENT_QUOTES, 'UTF-8');
-                $country = htmlspecialchars($_POST['country'], ENT_QUOTES, 'UTF-8');
+                $cart = self::$database->prepare("INSERT INTO cart(user_id,total) values(:id,0)");
+                $cart->bindParam("id",$comp->ID);
+                
+               
+                if($cart->execute()){
+                    $cid = self::$database->prepare("SELECT ID FROM cart WHERE user_id = :id");
+                    $cid->bindParam("id",$comp->ID);
+                    
+                    if($cid -> execute()){
+                        $cid = $cid->fetchObject();
+                        $city = htmlspecialchars($_POST['city'], ENT_QUOTES, 'UTF-8');
+                        $country = htmlspecialchars($_POST['country'], ENT_QUOTES, 'UTF-8');
 
-                $street = htmlspecialchars($_POST['street'], ENT_QUOTES, 'UTF-8');
-                $complete2 = self::$database->prepare("INSERT INTO customer(cust_id,city,street,country) VALUES(:id,:city,:street,:country)");
+                        $street = htmlspecialchars($_POST['street'], ENT_QUOTES, 'UTF-8');
+                        $complete2 = self::$database->prepare("INSERT INTO customer(cust_id,city,street,country,cart) VALUES(:id,:city,:street,:country,:cart)");
 
-                $complete2->bindParam("id",$comp->ID);
-                $complete2->bindParam("city",$city);
+                        $complete2->bindParam("id",$comp->ID);
+                        $complete2->bindParam("city",$city);
 
-                $complete2->bindParam("street",$street);
-                $complete2->bindParam("country",$country);
+                        $complete2->bindParam("street",$street);
+                        $complete2->bindParam("country",$country);
+                        $complete2->bindParam("cart",$cid->ID);
 
-                if($complete2->execute()){
-                    $act = self::$database->prepare("UPDATE users SET isactive = 1,token = :newtoken WHERE token = :token");
-                    $act->bindValue("newtoken",Hash::make(reg::generateRandomString(35).$comp->email));
-                    $act->bindValue("token",$_POST["complete"]);
+                        if($complete2->execute()){
+                            $act = self::$database->prepare("UPDATE users SET isactive = 1,token = :newtoken WHERE token = :token");
+                            $act->bindValue("newtoken",Hash::make(reg::generateRandomString(35).$comp->email));
+                            $act->bindValue("token",$_POST["complete"]);
 
-                    if(!$act->execute()){
-                        return view("error")->with("error","somthing went wrong!");
+                            if(!$act->execute()){
+                                return view("error")->with("error","somthing went wrong!");
+                            }
+
+                            return view("activate")->with("succsess","Your account has been activated!, you can login now!");
+                        }
+                    }else{
+                        return view("error")->with("error","somthing went wrong!");    
                     }
-
-                    return view("activate")->with("succsess","Your account has been activated!, you can login now!");
+                }else{
+                    return view("error")->with("error","somthing went wrong!");    
                 }
-
             }else{
                 return view("error")->with("error","somthing went wrong!");
             }

@@ -23,8 +23,10 @@
 </head>
 <body>
 
+  @if (session_status() == PHP_SESSION_NONE) 
+    <?php session_start(); ?>
+  @endif
 
-       
     <nav id="navers" class="navbar navbar-expand-lg bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
@@ -47,6 +49,11 @@
             <li class="nav-item">
               <a class="nav-link active" href="/logout">logout</a>
             </li>
+            @if (isset($_SESSION["info"]) && $_SESSION["info"]->roles == "c")
+            <li class="nav-item">
+              <a class="nav-link active" href="/cart">cart</a>
+            </li>
+            @endif
           </ul>
         </div>
       </div>
