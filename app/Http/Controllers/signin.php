@@ -47,8 +47,15 @@ class signin extends BaseController
                     if($user->isactive == 1){
                         $_SESSION["info"] = $user; // logs the user in
                         if($user->roles == "c"){
-                            // retrive other data from the customer table!
-                            return redirect("/customers");
+                            $customer = self::$database->prepare("SELECT * FROM customer WHERE cust_id = :id");
+                            $customer->bindParam("id",$user->ID);
+
+                            if($customer->execute()){
+                                $_SESSION["cust"] = $customer->fetchObject(); 
+                                return redirect("/customers");    
+                            }else{
+                                return view("signin")->with("error","somthing went wrong!");
+                            }
                         }else{
                             return redirect("/seller");
                         }

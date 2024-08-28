@@ -81,7 +81,6 @@ foreign key(product) references product(ID)
 )auto_increment = 1;
 
 alter table cart_products add column quantity INT default 1 NOT NULL;
-
 -- many to many
 create table Order_Product(
 order_id int not null,
@@ -126,4 +125,3 @@ alter table users add column token varchar(500) unique;
 ------------------------------------------------------
 alter table product add column type varchar(15) not null;
 ------------------------------------------------------
-select * from cart;

@@ -50,7 +50,7 @@
                 </form>    
 
                 <form action = "/customers/add" method = "post">
-                    
+                    @csrf
                     <div>   
                         <button value="{{$product['ID']}}" style="width:100%; background-color: #21dda6;border: none;height: 24px; padding-bottom:37px" name = "buy" type = "submit" >Add to cart</button>
                     </div>
