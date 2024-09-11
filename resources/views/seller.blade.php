@@ -40,7 +40,7 @@
             <input required type="text"  class="form-control" name="pname" id="" autocomplete="off">
             <label  class="form-label" for="">Price:</label>
 
-            <input required  class="form-control" type="number" name="price">
+            <input required  class="form-control" type="number" name="price" maxlength="25">
             <label  class="form-label" for="">Manufacturer:</label>
             <input required type="text"  class="form-control" name="Manu" id="">
 

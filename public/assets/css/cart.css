@@ -1,0 +1,43 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+#item{
+    width: 100%;
+
+    align-items: flex-start; 
+    gap: 10px; 
+}
+
+#img0{
+    width: 10%;
+}
+
+
+
+#tit{
+    color: blue;
+    white-space: nowrap;
+}
+
+#price{
+    margin-left: 2%;
+    color: red;
+}
+
+#del{
+    border: none;
+    color: rgb(19, 19, 218);
+}
+
+#quant{
+    width: 35px;
+    margin-left: 3%;
+}
+
+#inputs{
+    margin-left: 10%;
+    
+}
+

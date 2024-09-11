@@ -27,7 +27,7 @@ class cart extends BaseController
 
     //get
     function main(){
-        
+        return view("cart");
     }
   
 }
