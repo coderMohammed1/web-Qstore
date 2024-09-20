@@ -1,43 +1,63 @@
-*{
+
+* {
     margin: 0;
     padding: 0;
 }
 
-#item{
+/* Default styles */
+.item {
     width: 100%;
-
-    align-items: flex-start; 
-    gap: 10px; 
+    align-items: flex-start;
+    gap: 10px;
 }
 
-#img0{
+.img0 {
     width: 10%;
 }
 
-
-
-#tit{
+.tit {
     color: blue;
     white-space: nowrap;
 }
 
-#price{
+.price {
     margin-left: 2%;
     color: red;
 }
 
-#del{
+.del {
     border: none;
     color: rgb(19, 19, 218);
 }
 
-#quant{
+.quant {
     width: 35px;
     margin-left: 3%;
 }
 
-#inputs{
+.inputs {
     margin-left: 10%;
-    
 }
 
+/* Media query for screen width 470px or smaller */
+@media only screen and (max-width: 470px) {
+    main {
+        display: block !important;
+    }
+
+    .item {
+        margin-left: 0 !important;
+    }
+
+    .cont {
+        margin-left: 0 !important;
+    }
+
+    .img0 {
+        width: 30% !important;
+    }
+
+    .inputs {
+        margin-left: 30% !important;
+    }
+}

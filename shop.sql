@@ -125,3 +125,4 @@ alter table users add column token varchar(500) unique;
 ------------------------------------------------------
 alter table product add column type varchar(15) not null;
 ------------------------------------------------------
+select * from cart;
