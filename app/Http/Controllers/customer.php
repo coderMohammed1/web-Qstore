@@ -72,8 +72,31 @@ class customer extends BaseController
 
                 $add = self::$database->prepare("INSERT INTO cart_products(cart,product,quantity) values(:cart,:prod,1)");
                 $add->bindParam("cart",$_SESSION["cust"]->cart);
-
                 $add->bindParam("prod",$_POST["buy"]);
+
+                $seller = self::$database->prepare("SELECT seller FROM product WHERE ID = :pid LIMIT 1");
+                $seller->bindParam("pid",$_POST["buy"]);
+
+                if($seller->execute()){
+                    $seller = $seller->fetchObject();
+
+                    $isItthere = self::$database->prepare("SELECT sid,cust_id FROM mycustomers WHERE cust_id = :cid AND sid = :sid");
+                    $isItthere->bindParam("cid",$_SESSION["info"]->ID);
+                    $isItthere->bindParam("sid",$seller->seller);
+                    
+
+                    if($isItthere->execute() and $isItthere->rowCount() == 0){
+                        $link = self::$database->prepare("INSERT INTO mycustomers(cust_id,sid) VALUES(:cid,:sid)");
+                        $link->bindParam("cid",$_SESSION["info"]->ID);
+                        $link->bindParam("sid",$seller->seller);
+
+                       if(!$link->execute()){
+                        return view("error")->with("error","somthing went wrong!");
+                       }
+                    }
+
+                }
+
                 if($add->execute()){
 
                     $total = self::$database->prepare("SELECT product.price,quantity

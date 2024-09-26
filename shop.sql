@@ -114,6 +114,18 @@ seller_id int unique,
 total_sales decimal(15,3)
 );
 
+------------------------------------
+create table mycustomers(
+ ID int unique auto_increment,
+ cust_id INT,
+ sid INT
+);
+alter table mycustomers
+add constraint mycustfk foreign key(cust_id) references users(ID);
+
+alter table mycustomers
+add constraint mycustsfk foreign key(sid) references users(ID);
+------------------------------------------------------------------
 alter table seller
 add constraint sellfk foreign key(seller_id) references users(ID);
 
@@ -125,4 +137,3 @@ alter table users add column token varchar(500) unique;
 ------------------------------------------------------
 alter table product add column type varchar(15) not null;
 ------------------------------------------------------
-select * from cart;

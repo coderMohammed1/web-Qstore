@@ -44,7 +44,16 @@
               <a class="nav-link active" href="{{ config('general.url2') }}/signin">Login</a>
             </li>
             <li class="nav-item">
+             @if(!isset($_SESSION["info"]))
               <a class="nav-link active" href="{{ config('general.url2') }}/">Home Page</a>
+            @else
+              @if(isset($_SESSION["cust"]))
+                <a class="nav-link active" href="{{ config('general.url2') }}/customers">Home Page</a>
+              @else
+               <a class="nav-link active" href="{{ config('general.url2') }}/seller">Home Page</a>
+              @endif
+            @endif
+            
             </li>
             <li class="nav-item">
               <a class="nav-link active" href="/logout">logout</a>
@@ -54,12 +63,15 @@
               <a class="nav-link active" href="/cart">cart</a>
             </li>
             @endif
+            @if (isset($_SESSION["info"]) && $_SESSION["info"]->roles == "s")
+            <li class="nav-item">
+              <a class="nav-link active" href="/orders">Orders</a>
+            </li>
+            @endif
           </ul>
         </div>
       </div>
     </nav>
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
