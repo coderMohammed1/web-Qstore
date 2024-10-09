@@ -12,16 +12,23 @@
             margin-top: 20px;
              
         }
+        .ord{
+            align-items: center; 
+            text-align: center;
+            margin-top: 10px; 
+        }
     </style>
 </head>
 <body>
     @include("nav")
-    @foreach ($orders as $product)
-    <div class="card" style="width: 18rem;">
+    <br>
+    {{-- TODO: search bar --}}
+    @foreach ($orders as $cust)
+    <div class="card ord" style="width: 100%;">
         <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          <a href="#" class="btn btn-primary">Go somewhere</a>
+          <h5 class="card-title">{{$cust["fname"]}}</h5>
+          <p class="card-text">{{$cust["email"]}}</p>
+          <a href="/details?cid={{$cust['cust']}}" class="btn btn-primary">Order details!</a> 
         </div>
       </div>    
       @endforeach

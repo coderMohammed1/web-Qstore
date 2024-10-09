@@ -52,3 +52,4 @@ Route::get("/cart","\App\Http\Controllers\\cart@main");
 
 // orders (for seller)
 Route::get("/orders","\App\Http\Controllers\\orders@main");
+Route::get("/details","\App\Http\Controllers\\odetails@main");

@@ -58,8 +58,17 @@ class orders extends BaseController
         //             WHERE product.seller = :se
         //         )
         // ");
+        $orders = self::$database->prepare("SELECT 
+        mycustomers.sid as sellerid,
+        mycustomers.ID as mid,
+        mycustomers.cust_id as cust,
+        users.First_Name as fname,
+        users.Last_name as lname,
+        users.email as email
+        FROM mycustomers
+        JOIN users ON mycustomers.cust_id = users.ID
+        WHERE mycustomers.sid = :se");
 
-        $orders = self::$database->prepare(""); // use the new table
 
             $orders->bindParam("se",$_SESSION["info"]->ID);
             if($orders->execute()){
