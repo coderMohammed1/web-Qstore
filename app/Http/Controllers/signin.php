@@ -65,12 +65,12 @@ class signin extends BaseController
                     }
 
                 }else{
-                    return view("signin")->with("error","Email or password are not correct!");
+                    return view("signin")->with("error","Email or password is not correct!");
                 }
 
                 
             }else{
-                return view("signin")->with("error","Email or password are not correct!");
+                return view("signin")->with("error","Email or password is not correct!");
             }
 
         }

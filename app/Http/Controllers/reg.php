@@ -99,7 +99,7 @@ class reg extends BaseController
                     
                     if($checkActi->rowCount() != 0){
                         if($checkActio and $checkActio->isactive == 1){
-                            return view("signup")->with("error","this email is already active!");
+                            return view("signup")->with("succsess","Pleas check your email!");
                         }
                     }
 

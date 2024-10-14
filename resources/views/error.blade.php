@@ -9,8 +9,7 @@
     <style>
         #alert {
             text-align: center !important;
-            margin-top: 20px; /* Adjust the margin-top value as needed */
-            
+            margin-top: 20px; 
         }
     </style>
 </head>
@@ -19,7 +18,7 @@
    
    @if(isset($error))
    <div id="alert" class="alert alert-danger mx-auto w-50">
-       {{ $error }} <!-- Display the error message -->
+       {{ $error }}
    </div>
   @endif
 </body>

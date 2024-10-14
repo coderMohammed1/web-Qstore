@@ -20,11 +20,14 @@
             @csrf
             <label  class="form-label" for="">Email:</label>
             <input required type="text"  class="form-control" name="email" id="">
+
             <label  class="form-label" for="">Password:</label>
             <input required  class="form-control" type="password" name="password">
+
             <button class="btn btn-outline-success mt-3" name="login" type="submit">login</button>
             <a class="btn btn-outline-dark mt-3" href="{{config('general.url2')}}/register">signup instead</a>
-            <a class="btn btn-outline-warning mt-3" href="https://127.0.0.1/qmaker/repass.php">forgot your password?</a>
+
+            <a class="btn btn-outline-warning mt-3" href="/resetp">forgot your password?</a>
         </form>
 
         @if(isset($error))

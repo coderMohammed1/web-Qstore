@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Activation</title>
+    <title>Reset password</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -60,9 +60,10 @@
         </div>
         <div class="content">
             <p>Hi!</p>
-            <p>Thank you for registering with us! To complete your registration and activate your account, please click the button below:</p>
-            <a href="{{ url(config('general.url2') . '/Activate?token='.$token) }}">Activate your account</a>
-            <p>If you did not create an account, no further action is required.</p>
+            <p>To change your password, please click the button below:</p>
+            <a href="{{ url(config('general.url2') . '/resetp?token='.$token.'&email='.$mail) }}">Reset your password!</a>
+
+            <p>If you did not require this, pleas consider changing your password.</p>
             <p>DO NOT SHOW THIS EMAIL OR ANY OF ITS CONTENT TO ANY ONE!</p>
         </div>
         <div class="footer">

@@ -22,18 +22,23 @@
             <label class="form-label" for="">First name:</label>
             <input maxlength="50" class="form-control" type="text" name="name" required>
             <br>
+
             <label class="form-label" for="">Last name:</label>
             <input maxlength="50" class="form-control" type="text" name="lname" required>
             <br>
+
             <label class="form-label" for="">Date of birth:</label>
             <input class="form-control" type="date" name="age" required>
             <br>
+
             <label class="form-label" for="">Email:</label>
             <input class="form-control" placeholder="please use a real email" name="email" type="email" required>
             <br>
+
             <label class="form-label" for="">Password:</label>
             <input class="form-control" name="password" type="password" placeholder="refresh the page to take a look at the password rules" required>
             <br>
+
             <label for="exampleSelect" class="form-label">register as:</label>
             <select required class="form-select" name="role" id="sel"  aria-label="Default select example">
                 <option selected>Select an option</option>
@@ -41,6 +46,7 @@
                 <option value="s">Seller</option>
             </select> 
             <br>
+
             <div id = "customerf"></div>
             <br>
             <button class="btn btn-outline-dark" type="submit" name="reg_sub" id="mo">Register</button>
@@ -50,13 +56,13 @@
 
     @if(isset($error))
             <div id="alert" class="alert alert-danger">
-                {{ $error }} <!-- Display the error message -->
+                {{ $error }} 
             </div>
     @endif
 
     @if(isset($succsess))
             <div id="alert" class="alert alert-success">
-                {{ $succsess }} <!-- Display the error message -->
+                {{ $succsess }} 
             </div>
     @endif
     {{-- <script src="assets/js/signup.js"></script> --}}

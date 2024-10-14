@@ -53,3 +53,7 @@ Route::get("/cart","\App\Http\Controllers\\cart@main");
 // orders (for seller)
 Route::get("/orders","\App\Http\Controllers\\orders@main");
 Route::get("/details","\App\Http\Controllers\\odetails@main");
+
+//Forgot password
+Route::get("/resetp","\App\Http\Controllers\\reset@main");
+Route::post("/resetp","\App\Http\Controllers\\reset@sendmail");

@@ -9,16 +9,18 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class mailer extends Mailable
+class forgotp extends Mailable
 {
     use Queueable, SerializesModels;
     public $token;
+    public $mail;
     /**
      * Create a new message instance.
      */
-    public function __construct($token)
+    public function __construct($token,$mail)
     {
         $this->token = $token;
+        $this->mail = $mail;
     }
 
     /**
@@ -27,7 +29,7 @@ class mailer extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Activate Your account!',
+            subject: 'Reset password!',
         );
     }
 
@@ -37,7 +39,7 @@ class mailer extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'actmail', with: ['token' => $this->token]
+            view: 'resetMail', with: ['token' => $this->token, 'mail'=> $this->mail]
         );
     }
 
