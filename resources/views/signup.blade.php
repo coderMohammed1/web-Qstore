@@ -36,7 +36,7 @@
             <br>
 
             <label class="form-label" for="">Password:</label>
-            <input class="form-control" name="password" type="password" placeholder="refresh the page to take a look at the password rules" required>
+            <input class="form-control" name="password" type="password" placeholder="take a look at password rules bellow" required>
             <br>
 
             <label for="exampleSelect" class="form-label">register as:</label>
@@ -50,7 +50,8 @@
             <div id = "customerf"></div>
             <br>
             <button class="btn btn-outline-dark" type="submit" name="reg_sub" id="mo">Register</button>
-            <a class="btn btn-outline-success" href="{{config('general.url2')}}/signin">Sign in instead</a>
+            <a class="btn btn-outline-success" href="/signin">Sign in instead</a>
+            <a class="btn btn-outline-warning" href="/assets/html/passwords.html" target="_blank">Review password policy</a>
         </form>
     </div>
 
@@ -66,8 +67,8 @@
             </div>
     @endif
     {{-- <script src="assets/js/signup.js"></script> --}}
-    <script>
+    {{-- <script>
         alert("Password: allowed symbols: 0-9 and a-z and A-Z and @ and # and _. Your password should contain 8 or more characters and at least: one capital letter, one small letter, and one number.");
-    </script>
+    </script> --}}
 </body>
 </html>

@@ -49,6 +49,7 @@ Route::get("/logout",function(){
 
 //cart
 Route::get("/cart","\App\Http\Controllers\\cart@main");
+Route::post("/cart","\App\Http\Controllers\\cart@checkout");
 
 // orders (for seller)
 Route::get("/orders","\App\Http\Controllers\\orders@main");

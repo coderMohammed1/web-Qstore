@@ -12,6 +12,7 @@ class cart extends BaseController
     use AuthorizesRequests, ValidatesRequests;
 
     protected static $database;
+    private $prods;
 
     public function __construct()
     {
@@ -25,29 +26,98 @@ class cart extends BaseController
         }
     }
 
-    //get
-    function main(){
+    // get
+    function main()
+    {
         session_start();
 
-        if(isset($_SESSION["cust"]) and isset($_SESSION["info"])){
-            $prods = self::$database->prepare("SELECT product.ID as pid,product.p_name as pname,product.price as price
-            ,product.seller as sellerid,product.img as img,cart.user_id as cuid,cart.total as tot,cart_products.ID as cpid,
-            cart_products.quantity as quant,product.type as type
-            FROM cart_products JOIN cart ON cart_products.cart = :cart JOIN product ON cart_products.product = product.ID
-             where cart.user_id = :user");
+        if (isset($_SESSION["cust"]) && isset($_SESSION["info"])) {
+            $prods = $this->prods = self::$database->prepare("
+                SELECT 
+                    product.ID as pid,
+                    product.p_name as pname,
+                    product.price as price,
+                    product.seller as sellerid,
+                    product.img as img,
+                    cart.user_id as cuid,
+                    cart.total as tot,
+                    cart_products.ID as cpid,
+                    cart_products.quantity as quant,
+                    product.type as type
+                FROM 
+                    cart_products 
+                JOIN 
+                    cart ON cart_products.cart = :cart 
+                JOIN 
+                    product ON cart_products.product = product.ID
+                WHERE 
+                    cart.user_id = :user
+            ");
 
-            $prods->bindParam("user",$_SESSION["info"]->ID);
-            $prods->bindParam("cart",$_SESSION["cust"]->cart);
+            $prods->bindParam("user", $_SESSION["info"]->ID);
+            $prods->bindParam("cart", $_SESSION["cust"]->cart);
 
-            if($prods->execute()){
-                return view("cart")->with("data",$prods->fetchAll(PDO::FETCH_ASSOC));
-            }else{
-                return view("error")->with("error","somthing went wrong!");
+            if ($prods->execute() && $prods->rowCount() > 0) {
+                $prods = $prods->fetchAll(PDO::FETCH_ASSOC);
+                $_SESSION["prods"] = $prods; // to be used in the checkout method
+                return view("cart")->with("data", $prods);
+            } else {
+                return view("cart")->with("error", "The cart is empty!"); // edit this
             }
-
-        }else{
+        } else {
             return redirect("/signin");
         }
     }
-  
+
+    // post
+    function checkout()
+    {
+        session_start();
+
+        if (isset($_SESSION["info"]) && isset($_SESSION["cust"]) && isset($_SESSION["prods"])) {
+            $total = $_SESSION["prods"][0]["tot"];
+
+            $MakeOrder = self::$database->prepare("INSERT INTO orders(price, user_id) VALUES(:total, :id)");
+            $MakeOrder->bindParam("total", $total);
+            $MakeOrder->bindParam("id", $_SESSION["info"]->ID);
+
+            if ($MakeOrder->execute()) {
+                $currentOrder = self::$database->prepare("SELECT ID FROM orders WHERE user_id = :id ORDER BY ID DESC LIMIT 1");
+                $currentOrder->bindParam("id", $_SESSION["info"]->ID);
+
+                if ($currentOrder->execute()) {
+                    $oid = $currentOrder->fetchObject()->ID;
+                    $coreect = true;
+
+                    foreach ($_SESSION["prods"] as $prod) {
+                        $copy = self::$database->prepare("INSERT INTO Order_Product(order_id, product) VALUES(:order, :product)");
+                        $copy->bindParam("order", $oid);
+                        $copy->bindParam("product", $prod["pid"]);
+
+                        if (!$copy->execute()) {
+                            $coreect = false;
+                            break;
+                        }
+                    }
+
+                    if ($coreect) {
+                        $checkit = self::$database->prepare("DELETE FROM cart_products WHERE cart = :cid"); // making the cart empty again
+                        $checkit->bindParam("cid", $_SESSION["cust"]->cart);
+
+                        if ($checkit->execute()) {
+                            unset($_SESSION["prods"]);
+                            // TODO: reimplement my customers here
+                            return view("cart")->with("Done", "Your items will be delivered soon!");
+                        } else {
+                            return view("cart")->with("Done", "Something went wrong!");
+                        }
+                    } else {
+                        return view("cart")->with("Done", "Something went wrong!");
+                    }
+                }
+            }
+        } else {
+            return view("cart")->with("error", "The cart is already empty!");
+        }
+    }
 }

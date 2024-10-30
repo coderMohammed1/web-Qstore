@@ -43,29 +43,42 @@
 
     <br>
 
-    <main id="main" style="margin-top: 2%;">
-        @foreach ($data as $product)
-            <div class="container cont" style="width: 60%; margin-bottom: 3%">
-                <div class="item">
-                    <div style="display: flex;">
-                        <img class="img0" src="https://m.media-amazon.com/images/I/610z5QnJzmL._AC_UF1000,1000_QL80_.jpg" alt="err">
-                        {{-- {{'data:'.$product['type'].';base64,'.base64_encode($product['img'])}} --}}
-                        <div style="margin-left: 5px; width: 100%; display: flex;" class="tits">
-                            <h3 class="tit">Lorem ipsum dolor</h3>
-                            <h3 class="price">{{$product["price"]}}$</h3>
+    @if(isset($data))
+        <main id="main" style="margin-top: 2%;">
+            @foreach ($data as $product)
+                <div class="container cont" style="width: 60%; margin-bottom: 3%">
+                    <div class="item">
+                        <div style="display: flex;">
+                            <img class="img0" src="https://m.media-amazon.com/images/I/610z5QnJzmL._AC_UF1000,1000_QL80_.jpg" alt="err">
+                            {{-- {{'data:'.$product['type'].';base64,'.base64_encode($product['img'])}} --}}
+                            <div style="margin-left: 5px; width: 100%; display: flex;" class="tits">
+                                <h3 class="tit">Lorem ipsum dolor</h3>
+                                <h3 class="price">{{$product["price"]}}$</h3>
+                            </div>
+                        </div>
+                        <div class="inputs" style="display: flex;">
+                            <button class="del">delete</button>
+                            <input type="number" class="quant" value="{{$product['quant']}}">
                         </div>
                     </div>
-                    <div class="inputs" style="display: flex;">
-                        <button class="del">delete</button>
-                        <input type="number" class="quant" value="{{$product['quant']}}">
-                    </div>
                 </div>
-            </div>
-        @endforeach
-        <br>
-        <p style="margin-left: 5%">total: {{$product["tot"]}}$</p>    
-    </main>
+            @endforeach
+            <br>
+            <p style="margin-left: 5%">total: {{$product["tot"]}}$</p>    
+        </main>
+    @endif
+        
+    @if(isset($Done))
+        <div id="alert" class="alert alert-success">
+            {{ $Done }} 
+        </div>
+    @endif
 
+    @if(isset($error))
+        <div id="alert" class="alert alert-warning">
+            {{ $error }} 
+        </div>
+    @endif
     <script src="assets/js/cart.js"></script>
 </body>
 </html>
