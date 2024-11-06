@@ -61,7 +61,7 @@
         <div class="content">
             <p>Hi!</p>
             <p>Thank you for registering with us! To complete your registration and activate your account, please click the button below:</p>
-            <a href="{{ url(config('general.url2') . '/Activate?token='.$token) }}">Activate your account</a>
+            <a href="{{ url(config('general.url2') . '/activate?token='.$token) }}">Activate your account</a>
             <p>If you did not create an account, no further action is required.</p>
             <p>DO NOT SHOW THIS EMAIL OR ANY OF ITS CONTENT TO ANY ONE!</p>
         </div>

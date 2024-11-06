@@ -89,15 +89,40 @@ class cart extends BaseController
                     $oid = $currentOrder->fetchObject()->ID;
                     $coreect = true;
 
+                    $same_seller = -1; //just to check if the current product share the same seller with las one
                     foreach ($_SESSION["prods"] as $prod) {
                         $copy = self::$database->prepare("INSERT INTO Order_Product(order_id, product) VALUES(:order, :product)");
                         $copy->bindParam("order", $oid);
                         $copy->bindParam("product", $prod["pid"]);
 
+                        //mycustomers table
+                      
+                        $seller = $prod["sellerid"];
+                        
+                        if($same_seller != $seller){
+                            $isItthere = self::$database->prepare("SELECT 'a' FROM mycustomers WHERE cust_id = :cid AND sid = :sid");
+                            $isItthere->bindParam("cid",$_SESSION["info"]->ID);
+                            $isItthere->bindParam("sid",$seller);
+                            
+        
+                            if($isItthere->execute() and $isItthere->rowCount() == 0){
+                                $link = self::$database->prepare("INSERT INTO mycustomers(cust_id,sid) VALUES(:cid,:sid)");
+                                $link->bindParam("cid",$_SESSION["info"]->ID);
+                                $link->bindParam("sid",$seller);
+        
+                                if(!$link->execute()){
+                                return view("error")->with("error","somthing went wrong!");
+                                }
+                            }
+
+                        }
+
                         if (!$copy->execute()) {
                             $coreect = false;
                             break;
                         }
+                        $same_seller = $seller;
+
                     }
 
                     if ($coreect) {
@@ -106,7 +131,7 @@ class cart extends BaseController
 
                         if ($checkit->execute()) {
                             unset($_SESSION["prods"]);
-                            // TODO: reimplement my customers here
+                            
                             return view("cart")->with("Done", "Your items will be delivered soon!");
                         } else {
                             return view("cart")->with("Done", "Something went wrong!");

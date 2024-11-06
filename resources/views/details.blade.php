@@ -16,6 +16,15 @@
 </head>
 <body>
     @include("nav")
-    <h1>ss</h1>
+    
+    @foreach ($data as $item)
+        <h1>name:</h1>
+        <p>{{$item["pname"]}}</p>
+        <br>
+
+        <h1>price:</h1>
+        <p>{{$item["price"]}}</p>
+        <br>
+    @endforeach
 </body>
 </html>

@@ -58,6 +58,7 @@ class orders extends BaseController
         //             WHERE product.seller = :se
         //         )
         // ");
+        
         $orders = self::$database->prepare("SELECT 
         mycustomers.sid as sellerid,
         mycustomers.ID as mid,

@@ -139,3 +139,4 @@ alter table product add column type varchar(15) not null;
 ------------------------------------------------------
 
 -- TODO add delivered col to orders table
+-- SET FOREIGN_KEY_CHECKS = 1;
