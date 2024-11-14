@@ -56,7 +56,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Password Reset</h1>
+            <h1>Account Activation</h1>
         </div>
         <div class="content">
             <p>Hi!</p>

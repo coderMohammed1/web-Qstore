@@ -32,7 +32,7 @@
     @include('nav')
 
     <div class="container">
-        <div id="sh" class="shadow p-3 mb-1 bg-body rounded"> Welcome Mohammed</div>
+        <div id="sh" class="shadow p-3 mb-1 bg-body rounded"> Welcome {{$_SESSION["info"]->First_Name}}</div>
 
         <form id="f1" method="POST">
             @csrf
@@ -49,10 +49,10 @@
                 <div class="container cont" style="width: 60%; margin-bottom: 3%">
                     <div class="item">
                         <div style="display: flex;">
-                            <img class="img0" src="https://m.media-amazon.com/images/I/610z5QnJzmL._AC_UF1000,1000_QL80_.jpg" alt="err">
+                            <img class="img0" src="{{'data:'.$product['type'].';base64,'.base64_encode($product['img'])}}" alt="err">
                             {{-- {{'data:'.$product['type'].';base64,'.base64_encode($product['img'])}} --}}
                             <div style="margin-left: 5px; width: 100%; display: flex;" class="tits">
-                                <h3 class="tit">Lorem ipsum dolor</h3>
+                                <h3 class="tit">{{$product["pname"]}}</h3>
                                 <h3 class="price">{{$product["price"]}}$</h3>
                             </div>
                         </div>

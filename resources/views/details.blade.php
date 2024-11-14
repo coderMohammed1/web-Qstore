@@ -10,21 +10,50 @@
         #alert {
             text-align: center !important;
             margin-top: 20px;
-             
         }
-    </style>    
+
+        #sh {
+            text-align: center !important;
+            border: solid red 1px;
+        }
+
+        #f1 {
+            display: flex;
+            justify-content: center;
+        }
+
+        #btn {
+            width: 100% !important;
+        }
+    </style>
 </head>
 <body>
     @include("nav")
-    
-    @foreach ($data as $item)
-        <h1>name:</h1>
-        <p>{{$item["pname"]}}</p>
-        <br>
 
-        <h1>price:</h1>
-        <p>{{$item["price"]}}</p>
-        <br>
+    <br>
+    <div class="container">
+        <div id="sh" class="shadow p-3 mb-1 bg-body rounded">{{$cname->First_Name}}'s order</div>
+
+        <form id="f1" method="POST">
+            @csrf
+            <button class="btn btn-outline-secondary mt-2" id="btn" name="dilivered" type="submit">Diliverd!</button>
+        </form>
+    </div>
+
+    @foreach ($data as $item)
+    
+    <div class="mt-4" style="width: 60% !important; margin:auto;">
+        <div class="card" style="width: 100%; text-align: center;">
+            <div class="card-header">
+            {{$item['pname']}}
+            </div>
+
+            <ul class="list-group list-group-flush">
+            <li class="list-group-item">Price: {{$item['price']}}</li>
+            </ul>
+        </div>
+    </div>
+    <br>
     @endforeach
 </body>
 </html>

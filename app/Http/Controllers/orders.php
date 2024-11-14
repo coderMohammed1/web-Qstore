@@ -28,37 +28,7 @@ class orders extends BaseController
 
         if(isset($_SESSION["info"]) and $_SESSION["info"]->roles = "s"){
             // think about huge sellers so u may need to limit and add search
-        //     $orders = self::$database->prepare("
-        //     SELECT 
-        //         cart_products.product AS pid, 
-        //         cart_products.quantity AS quant,
-        //         city AS city,
-        //         street AS street,
-        //         country AS country,
-        //         product.p_name AS pname,
-        //         price AS price,
-        //         cusers.email AS email,
-        //         cusers.First_Name AS ufname,
-        //         cusers.Last_Name AS ulname
-        //     FROM 
-        //         cart_products
-        //     JOIN 
-        //         cart ON cart.ID = cart_products.cart 
-        //     JOIN 
-        //         users AS cusers ON cusers.ID = cart.user_id 
-        //     JOIN 
-        //         customer ON customer.cust_id = cart.user_id 
-        //     JOIN 
-        //         product ON product.ID = cart_products.product
-             
-        //     WHERE 
-        //         cart_products.product IN (
-        //             SELECT product.ID 
-        //             FROM product 
-        //             WHERE product.seller = :se
-        //         )
-        // ");
-        
+       
         $orders = self::$database->prepare("SELECT 
         mycustomers.sid as sellerid,
         mycustomers.ID as mid,
