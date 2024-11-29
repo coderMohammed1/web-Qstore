@@ -54,6 +54,7 @@ Route::post("/cart","\App\Http\Controllers\\cart@checkout");
 // orders (for seller)
 Route::get("/orders","\App\Http\Controllers\\orders@main");
 Route::get("/details","\App\Http\Controllers\\odetails@main");
+Route::post("/orders","\App\Http\Controllers\\orders@search");
 
 //Forgot password
 Route::get("/resetp","\App\Http\Controllers\\reset@main");

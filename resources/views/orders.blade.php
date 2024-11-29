@@ -21,8 +21,17 @@
 </head>
 <body>
     @include("nav")
-    <br>
-    {{-- TODO: search bar --}}
+   
+    <div class="container mb-2" >
+        <form  method="post">
+            @csrf
+            <label class="form-label mt-4 ">SEARCH:</label>
+            <input class="form-control " type="text" name="search" placeholder="customer name or email" required/>
+            <button class="btn btn-dark mt-1 w-100" type="submit" name="send02">search</button>
+            <a class="btn btn-info mt-1 w-100" href="/orders">Back!</a>
+        </form>
+    </div>
+
     @foreach ($orders as $cust)
     <div class="card ord" style="width: 100%;">
         <div class="card-body">

@@ -27,7 +27,10 @@ class odetails extends BaseController
         session_start();
 
         if(isset($_SESSION["info"])){
-            $check = self::$database->prepare("SELECT First_Name FROM mycustomers JOIN users ON users.ID = mycustomers.cust_id WHERE cust_id = :cid AND sid = :sid");
+            $check = self::$database->prepare("SELECT First_Name,email,street,city,country FROM mycustomers 
+            JOIN users ON users.ID = mycustomers.cust_id
+            JOIN customer ON customer.cust_id = :cid
+             WHERE mycustomers.cust_id = :cid AND sid = :sid");
             $check->bindParam("cid",$_GET["cid"]);
             $check->bindParam("sid",$_SESSION["info"]->ID);
             
@@ -54,7 +57,7 @@ class odetails extends BaseController
                 $details->bindParam("sid",$_SESSION["info"]->ID);
 
                 if($details->execute()){
-                    return view("details")->with("data",$details->fetchAll(PDO::FETCH_ASSOC))->with("cname",$check->fetchObject());
+                    return view("details")->with("data",$details->fetchAll(PDO::FETCH_ASSOC))->with("customerdet",$check->fetchAll(PDO::FETCH_ASSOC));
                 }
 
             }else{
