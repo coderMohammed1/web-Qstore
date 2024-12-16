@@ -39,7 +39,7 @@
                 </div>
 
                 <div style="border-bottom: 1px red solid;">
-                    <p> Price:{{$product["price"]}}$</p>
+                    <p> Price: {{$product["price"]}}$</p>
                 </div>
 
                 <form action = "/product/description" method = "post">

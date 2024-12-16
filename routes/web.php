@@ -59,3 +59,7 @@ Route::post("/orders","\App\Http\Controllers\\orders@search");
 //Forgot password
 Route::get("/resetp","\App\Http\Controllers\\reset@main");
 Route::post("/resetp","\App\Http\Controllers\\reset@sendmail");
+
+//edit products
+Route::get("/editProducts","\App\Http\Controllers\\editp@main");
+Route::post("/editProducts","\App\Http\Controllers\\editp@edit");

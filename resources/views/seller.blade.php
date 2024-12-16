@@ -18,7 +18,7 @@
             max-height: 300px;
         }
 
-        .custom-file-upload {
+    .custom-file-upload {
         /* border: 1px solid #ccc; */
         /* display: inline-block; */
         padding: 6px 12px;
@@ -55,6 +55,7 @@
 
             <br>
             <button value="{{$_SESSION['info']->ID}}" class="btn btn-outline-success mt-3" name="sell" type="submit">Upload</button>
+            <a class="btn btn-outline-warning mt-3" href="/editProducts">Edit your products</a>
         </form>
 
         @if(isset($error))
@@ -65,7 +66,7 @@
 
         @if(isset($succsess))
             <div id="alert" class="alert alert-success">
-                {{ $succsess }} <!-- Display the error message -->
+                {{ $succsess }}
             </div>
         @endif
     </main>
