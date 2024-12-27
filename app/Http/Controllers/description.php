@@ -6,6 +6,8 @@ use PDO;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Log;
+
 
 class description extends BaseController
 {
@@ -31,19 +33,41 @@ class description extends BaseController
     function read(){
         session_start();
 
-        if(isset($_POST["descr"]) and isset($_SESSION["info"]) and $_SESSION["info"]->roles == "c"){
-            $product = self::$database->prepare("SELECT * FROM product JOIN users ON product.seller = users.ID AND product.ID = :id");
-            $product->bindParam(":id",$_POST["descr"]);
+        if(isset($_SESSION["info"])){
 
-            if($product->execute()){
-                return view("description")->with("product",$product->fetchObject());
-            }else{
-                return view("error")->with("error","Somthing went wrong!");
+            // edit Description
+            if(isset($_POST["Ndescription"])){
+
+                $updatepd = self::$database->prepare("UPDATE product SET description = :newd WHERE ID = :pid AND seller = :selid");  // AND for IDOR protection
+                $updatepd->bindParam("selid",$_SESSION["info"]->ID);
+                $updatepd->bindParam("pid",$_POST["update"]);
+                $updatepd->bindParam("newd",$_POST["Ndescription"]);
+
+                if($updatepd->execute()){
+                    return redirect("/editProducts");
+                }else{
+                    return view("error")->with("error","Somthing went wrong!");
+                }
+                
             }
-        }else{
-            return redirect("/signin");
-        }
+            
+            if(isset($_POST["descr"])){
+                $product = self::$database->prepare("SELECT *, product.ID as pid FROM product JOIN users ON product.seller = users.ID AND product.ID = :id");
+                $product->bindParam(":id",$_POST["descr"]);
+
+                if($product->execute()){
+                    return view("description")->with("product",$product->fetchObject());
+               }else{
+                   return view("error")->with("error","Somthing went wrong!");
+               }
+
+            }
+
         
+    }else{
+        return redirect("/signin");
     }
-  
+
+ }
+    
 }

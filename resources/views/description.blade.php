@@ -41,7 +41,17 @@
 
         <div style="text-align: center;">
             <h2>Description:</h2>
-            <p id="des">{{$product->description}}</p>
+
+            @if($_SESSION["info"]->roles == "s")
+                <form method="POST" action="/product/description">
+                    @csrf
+                    <textarea name="Ndescription" class="form-control" rows="5"  style="resize: vertical;">{{$product->description}}</textarea>
+                    <br>
+                    <button name="update" value="{{$product->pid}}" class="btn btn-dark" style="width: 100%">Edit</button>
+                </form>
+            @else
+                <p id="des">{{$product->description}}</p>
+            @endif
         </div>
 
         <div style="display: block; align-items: center; text-align: center; width:100%">
