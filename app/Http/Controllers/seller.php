@@ -47,7 +47,7 @@ class seller extends BaseController
                 return view("error")->with("error","You are not authriezed!");
             }
 
-             $allowedExtensions = array("jpg", "jpeg", "png", "gif","bmp", "tiff", "tif", "webp", "svg", "ico", "heic", "heif", "jfif", "psd", "raw", "eps", "ai", "cdr");
+             $allowedExtensions = array("jpg", "jpeg", "png", "gif","bmp", "tiff", "tif", "webp", "ico", "heic", "heif", "jfif", "psd", "raw", "eps", "ai", "cdr");
 
              $prod = self::$database->prepare("INSERT INTO product(p_name,price,Manfacturer,seller,description,img,type) VALUES(:pname,:price,:manufact,:seller,:dsc,:img,:ty)");
              $prod->bindValue("pname",htmlspecialchars($_POST['pname'], ENT_QUOTES, 'UTF-8'));

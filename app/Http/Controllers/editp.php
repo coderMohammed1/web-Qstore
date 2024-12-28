@@ -85,7 +85,7 @@ class editp extends BaseController
 
            if(isset($_FILES["img2"])){
             // edit product's image
-            $allowedExtensions = array("jpg", "jpeg", "png", "gif","bmp", "tiff", "tif", "webp", "svg", "ico", "heic", "heif", "jfif", "psd", "raw", "eps", "ai", "cdr");
+            $allowedExtensions = array("jpg", "jpeg", "png", "gif","bmp", "tiff", "tif", "webp", "ico", "heic", "heif", "jfif", "psd", "raw", "eps", "ai", "cdr");
 
            if(in_array(strtolower(pathinfo($_FILES["img2"]['name'], PATHINFO_EXTENSION)), $allowedExtensions)){
                 $pnaem = self::$database->prepare("UPDATE product SET img = :img2, type = :ty WHERE seller = :seller AND id = :id");

@@ -89,7 +89,7 @@
                         <button title="confirm your edit" value="{{$product['ID']}}" style="width:100%; background-color: #21dda6;border: none;height: 24px; padding-bottom:37px" name = "pimg" type = "submit" >Edit the image!</button>
 
                         <label title="pick an image" class="custom-file-upload">
-                            <input required type="file" name="img2" accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff, .tif, .webp, .svg, .ico, .heic, .heif, .jfif, .psd, .raw, .eps, .ai, .cdr">
+                            <input required type="file" name="img2" accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff, .tif, .webp, .ico, .heic, .heif, .jfif, .psd, .raw, .eps, .ai, .cdr">
                             <i style="font-size:24px" class="fa">&#xf0c6;</i>
                         </label>
 

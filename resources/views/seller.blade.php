@@ -49,7 +49,7 @@
 
             <label class="custom-file-upload">
                 Add an image:
-                <input required type="file" name="img" accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff, .tif, .webp, .svg, .ico, .heic, .heif, .jfif, .psd, .raw, .eps, .ai, .cdr">
+                <input required type="file" name="img" accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff, .tif, .webp, .ico, .heic, .heif, .jfif, .psd, .raw, .eps, .ai, .cdr">
                 <i style="font-size:24px" class="fa">&#xf0c6;</i>
             </label>
 
