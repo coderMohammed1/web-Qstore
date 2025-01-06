@@ -95,6 +95,13 @@
 
                     </div>
                 </form>
+
+                <form action = "/editProducts/delete" method = "post">
+                    @csrf
+                    <div style="border-bottom: 1px red solid;">   
+                        <button value="{{$product['ID']}}" style="width:100%; border: none;height: 24px; padding-bottom:35px; background-color: #dc3545; color:white;" name = "delp" type = "submit" >Delete !</button>
+                    </div>
+                </form>
             </div>
         @endforeach
 

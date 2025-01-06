@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use PDO;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -27,8 +28,7 @@ class cart extends BaseController
     }
 
     // get
-    function main()
-    {
+    function main() {
         session_start();
 
         if (isset($_SESSION["cust"]) && isset($_SESSION["info"])) {
@@ -70,79 +70,118 @@ class cart extends BaseController
     }
 
     // post
-    function checkout()
-    {
+    function checkout(){
         session_start();
 
         if (isset($_SESSION["info"]) && isset($_SESSION["cust"]) && isset($_SESSION["prods"])) {
-            $total = $_SESSION["prods"][0]["tot"];
+            try{
+                self::$database->beginTransaction(); // start trasction
+                $total = $_SESSION["prods"][0]["tot"];
 
-            $MakeOrder = self::$database->prepare("INSERT INTO orders(price, user_id) VALUES(:total, :id)");
-            $MakeOrder->bindParam("total", $total);
-            $MakeOrder->bindParam("id", $_SESSION["info"]->ID);
+                $MakeOrder = self::$database->prepare("INSERT INTO orders(price, user_id) VALUES(:total, :id)");
+                $MakeOrder->bindParam("total", $total);
+                $MakeOrder->bindParam("id", $_SESSION["info"]->ID);
 
-            if ($MakeOrder->execute()) {
-                $currentOrder = self::$database->prepare("SELECT ID FROM orders WHERE user_id = :id ORDER BY ID DESC LIMIT 1");
-                $currentOrder->bindParam("id", $_SESSION["info"]->ID);
+                if ($MakeOrder->execute()) {
+                    $currentOrder = self::$database->prepare("SELECT ID FROM orders WHERE user_id = :id ORDER BY ID DESC LIMIT 1");
+                    $currentOrder->bindParam("id", $_SESSION["info"]->ID);
 
-                if ($currentOrder->execute()) {
-                    $oid = $currentOrder->fetchObject()->ID;
-                    $coreect = true;
+                    if ($currentOrder->execute()) {
+                        $oid = $currentOrder->fetchObject()->ID;
+                        $coreect = true;
 
-                    $same_seller = -1; //just to check if the current product share the same seller with las one
-                    foreach ($_SESSION["prods"] as $prod) {
-                        $copy = self::$database->prepare("INSERT INTO Order_Product(order_id, product) VALUES(:order, :product)");
-                        $copy->bindParam("order", $oid);
-                        $copy->bindParam("product", $prod["pid"]);
+                        $same_seller = -1; //just to check if the current product share the same seller with las one
+                        foreach ($_SESSION["prods"] as $prod) {
+                            $copy = self::$database->prepare("INSERT INTO Order_Product(order_id, product) VALUES(:order, :product)");
+                            $copy->bindParam("order", $oid);
+                            $copy->bindParam("product", $prod["pid"]);
 
-                        //mycustomers table
-                      
-                        $seller = $prod["sellerid"];
+                            //mycustomers table
                         
-                        if($same_seller != $seller){
-                            $isItthere = self::$database->prepare("SELECT 'a' FROM mycustomers WHERE cust_id = :cid AND sid = :sid");
-                            $isItthere->bindParam("cid",$_SESSION["info"]->ID);
-                            $isItthere->bindParam("sid",$seller);
+                            $seller = $prod["sellerid"];
                             
-        
-                            if($isItthere->execute() and $isItthere->rowCount() == 0){
-                                $link = self::$database->prepare("INSERT INTO mycustomers(cust_id,sid) VALUES(:cid,:sid)");
-                                $link->bindParam("cid",$_SESSION["info"]->ID);
-                                $link->bindParam("sid",$seller);
-        
-                                if(!$link->execute()){
-                                return view("error")->with("error","somthing went wrong!");
+                            if($same_seller != $seller){
+                                $isItthere = self::$database->prepare("SELECT 'a' FROM mycustomers WHERE cust_id = :cid AND sid = :sid");
+                                $isItthere->bindParam("cid",$_SESSION["info"]->ID);
+                                $isItthere->bindParam("sid",$seller);
+                                
+                                if(!$isItthere->execute()){
+                                    self::$database->rollBack();
+                                    return view("error")->with("error","somthing went wrong!");
                                 }
+            
+                                if($isItthere->rowCount() == 0){
+                                    $link = self::$database->prepare("INSERT INTO mycustomers(cust_id,sid) VALUES(:cid,:sid)");
+                                    $link->bindParam("cid",$_SESSION["info"]->ID);
+                                    $link->bindParam("sid",$seller);
+            
+                                    if(!$link->execute()){
+                                        self::$database->rollBack();
+                                        return view("error")->with("error","somthing went wrong!");
+                                    }
+                                }
+
                             }
 
+                            if (!$copy->execute()) {
+                                $coreect = false;
+                                break;
+                            }
+                            $same_seller = $seller;
                         }
 
-                        if (!$copy->execute()) {
-                            $coreect = false;
-                            break;
-                        }
-                        $same_seller = $seller;
+                        if ($coreect) {
+                            $checkit = self::$database->prepare("DELETE FROM cart_products WHERE cart = :cid"); // making the cart empty again
+                            $checkit->bindParam("cid", $_SESSION["cust"]->cart);
 
-                    }
+                            if ($checkit->execute()) {
+                                unset($_SESSION["prods"]);
 
-                    if ($coreect) {
-                        $checkit = self::$database->prepare("DELETE FROM cart_products WHERE cart = :cid"); // making the cart empty again
-                        $checkit->bindParam("cid", $_SESSION["cust"]->cart);
-
-                        if ($checkit->execute()) {
-                            unset($_SESSION["prods"]);
-                            
-                            return view("cart")->with("Done", "Your items will be delivered soon!");
+                                self::$database->commit(); // end of the trasction
+                                return view("cart")->with("Done", "Your items will be delivered soon!");
+                            } else {
+                                self::$database->rollBack();
+                                return view("cart")->with("Done", "Something went wrong!");
+                            }
                         } else {
+                            self::$database->rollBack();
                             return view("cart")->with("Done", "Something went wrong!");
                         }
-                    } else {
-                        return view("cart")->with("Done", "Something went wrong!");
                     }
+                }else{
+                    self::$database->rollBack();
+                    return view("error")->with("error","somthing went wrong!");
                 }
+
+            }catch(Exception $err){
+                self::$database->rollBack();
+                return view("error")->with("error","somthing went wrong!");
             }
+
         } else {
             return view("cart")->with("error", "The cart is already empty!");
         }
     }
+
+    function delete(){
+        session_start();
+
+        if(isset($_SESSION["cust"]) and isset($_POST["delc"])){
+
+            $delp = self::$database->prepare("DELETE FROM cart_products WHERE ID = :cpid AND cart = :cartID");
+            $delp->bindParam("cpid",$_POST["delc"]);
+            $delp->bindParam("cartID",$_SESSION["cust"]->cart);
+
+            if($delp->execute()){
+                return redirect("/cart");
+            }else{
+                return view("error")->with("error","somthing went wrong!");
+            }
+
+        }else{
+            return redirect("/signin");
+        }
+
+    }
+
 }

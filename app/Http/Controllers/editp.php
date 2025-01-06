@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use PDO;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+
+// TODO: add soldout and warning for the delte
 
 class editp extends BaseController
 {
@@ -104,6 +107,57 @@ class editp extends BaseController
                 return view("error")->with("error","this extention is not allowed!");
             }
        }
+
+        }else{
+            return redirect("/login");
+        }
+
+    }
+
+    function delete(){
+        session_start();
+        if(isset($_SESSION['info']) and isset($_POST["delp"])){
+
+            try{
+                self::$database->beginTransaction(); // start of trasction
+
+                $check = self::$database->prepare("SELECT ID FROM product WHERE seller = :seller AND ID = :id"); // for security 
+                $check->bindParam("seller", $_SESSION["info"]->ID);
+                $check->bindParam("id", $_POST["delp"]);
+
+                if ($check->execute()) {
+                   
+                    if ($check->rowCount() > 0) {
+                       
+                        // Cascade deletion in all tables
+                        $cascadep = self::$database->prepare("DELETE FROM cart_products WHERE product = :pid");
+                        $cascadep->bindParam("pid", $_POST["delp"]);
+                        $cascadep->execute();
+
+                        $cascadep2 = self::$database->prepare("DELETE FROM order_product WHERE product = :pid");
+                        $cascadep2->bindParam("pid", $_POST["delp"]);
+                        $cascadep2->execute();
+
+                        $delete = self::$database->prepare("DELETE FROM product WHERE ID = :id");
+                        $delete->bindParam("id", $_POST["delp"]);
+                        $delete->execute();
+
+                        self::$database->commit(); // end of trasction
+                        return redirect("/editProducts")->with("success", "Your product has been deleted successfully!");
+                    } else {
+                        
+                        self::$database->rollBack();
+                        return redirect("/editProducts")->with("error", "Product not found or you are not authorized to delete it.");
+                    }
+                } else {
+                    self::$database->rollBack();
+                    return redirect("/editProducts")->with("error", "Something went wrong!");
+                }
+
+            }catch(Exception $err){
+                self::$database->rollBack();
+                return redirect("/editProducts")->with("error", "Something went wrong! Error: ");
+            }
 
         }else{
             return redirect("/login");

@@ -50,6 +50,7 @@ Route::get("/logout",function(){
 //cart
 Route::get("/cart","\App\Http\Controllers\\cart@main");
 Route::post("/cart","\App\Http\Controllers\\cart@checkout");
+Route::post("/cart/delete","\App\Http\Controllers\\cart@delete");
 
 // orders (for seller)
 Route::get("/orders","\App\Http\Controllers\\orders@main");
@@ -63,3 +64,4 @@ Route::post("/resetp","\App\Http\Controllers\\reset@sendmail");
 //edit products
 Route::get("/editProducts","\App\Http\Controllers\\editp@main");
 Route::post("/editProducts","\App\Http\Controllers\\editp@edit");
+Route::post("/editProducts/delete","\App\Http\Controllers\\editp@delete");

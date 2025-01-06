@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         <div class="inputs" style="display: flex;">
-                            <button class="del">delete</button>
+                            <form method="POST" action="/cart/delete">@csrf <button name="delc" value="{{$product['cpid']}}" class="del">delete</button></form>
                             <input type="number" class="quant" value="{{$product['quant']}}">
                         </div>
                     </div>
