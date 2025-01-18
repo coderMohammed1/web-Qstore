@@ -141,6 +141,6 @@ alter table users add column token varchar(500) unique;
 ------------------------------------------------------
 alter table product add column type varchar(15) not null;
 ------------------------------------------------------
-select * from users;
+select * from cart;
 -- TODO add delivered col to orders table
 -- SET FOREIGN_KEY_CHECKS = 1;
