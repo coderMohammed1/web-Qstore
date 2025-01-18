@@ -167,21 +167,115 @@ class cart extends BaseController
         session_start();
 
         if(isset($_SESSION["cust"]) and isset($_POST["delc"])){
+            self::$database->beginTransaction(); // start a transction
 
-            $delp = self::$database->prepare("DELETE FROM cart_products WHERE ID = :cpid AND cart = :cartID");
-            $delp->bindParam("cpid",$_POST["delc"]);
-            $delp->bindParam("cartID",$_SESSION["cust"]->cart);
+            try{
+                $delp = self::$database->prepare("DELETE FROM cart_products WHERE ID = :cpid AND cart = :cartID");
+                $delp->bindParam("cpid",$_POST["delc"]);
+                $delp->bindParam("cartID",$_SESSION["cust"]->cart);
 
-            if($delp->execute()){
-                return redirect("/cart");
-            }else{
-                return view("error")->with("error","somthing went wrong!");
+                if($delp->execute()){
+
+                    // update the total as the items got deleted
+                    $total = self::$database->prepare("SELECT product.price,quantity
+                    FROM cart_products JOIN product ON product.ID = cart_products.product 
+                    WHERE cart = :id");
+                    $total->bindParam("id",$_SESSION["cust"]->cart);
+
+                    if($total->execute()){
+                        $sum = 0;
+                        foreach($total as $tot){
+                            $sum += $tot["price"]*$tot["quantity"];
+                        }
+
+                        $cartTotal = self::$database->prepare("UPDATE cart SET total = :total WHERE ID = :cart");
+                        $cartTotal->bindParam("total",$sum);
+                        $cartTotal->bindParam("cart",$_SESSION["cust"]->cart);
+
+                        if($cartTotal->execute()){
+                            self::$database->commit(); // end of trasction
+                        }else{
+                            self::$database->rollBack();
+                            return "error";
+                        }
+                        
+                    }else{
+                        self::$database->rollBack();
+                        return "error";
+                    }
+
+                    return redirect("/cart");
+                }else{
+                    self::$database->rollBack();
+                    return view("error")->with("error","somthing went wrong!");
+                }
+            }catch(Exception $err){
+                self::$database->rollBack();
+                return view("error")->with("error","somthing went wrong");
+            }
+        }else{
+            return redirect("/signin");
+        }
+
+    }
+
+    function quantity(){
+        session_start();
+        if(isset($_SESSION["cust"])){
+            // add rules
+            if(isset($_POST["number"]) and $_POST["number"] > 0){ //TODO:edit this when we implement the soldout
+                self::$database->beginTransaction(); // start trasction
+
+                try{
+                    $controlQ = self::$database->prepare("UPDATE cart_products SET quantity = :quant WHERE ID = :pid AND cart = :cart");
+                    $controlQ->bindValue("quant",htmlspecialchars($_POST['number'], ENT_QUOTES, 'UTF-8'));
+                    $controlQ->bindParam("cart",$_SESSION["cust"]->cart);
+                    $controlQ->bindParam("pid",$_POST["prod"]);
+
+                    if($controlQ->execute()){
+                        // update the total as the quanity got updated
+                        $total = self::$database->prepare("SELECT product.price,quantity
+                        FROM cart_products JOIN product ON product.ID = cart_products.product 
+                        WHERE cart = :id");
+                        $total->bindParam("id",$_SESSION["cust"]->cart);
+
+                        if($total->execute()){
+                            $sum = 0;
+                            foreach($total as $tot){
+                                $sum += $tot["price"]*$tot["quantity"];
+                            }
+
+                            $cartTotal = self::$database->prepare("UPDATE cart SET total = :total WHERE ID = :cart");
+                            $cartTotal->bindParam("total",$sum);
+                            $cartTotal->bindParam("cart",$_SESSION["cust"]->cart);
+
+                            if($cartTotal->execute()){
+                                self::$database->commit(); // end of trasction
+                            }else{
+                                self::$database->rollBack();
+                                return "error";
+                            }
+                            
+                        }else{
+                            self::$database->rollBack();
+                            return "error";
+                        }
+
+                        return "done";
+                    }else{
+                        self::$database->rollBack();
+                        return "error";
+                    }
+                }catch(Exception $erer){
+                    self::$database->rollBack();
+                    return "error";
+                }
+
             }
 
         }else{
             return redirect("/signin");
         }
-
     }
 
 }

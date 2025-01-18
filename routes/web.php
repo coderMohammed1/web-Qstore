@@ -51,6 +51,7 @@ Route::get("/logout",function(){
 Route::get("/cart","\App\Http\Controllers\\cart@main");
 Route::post("/cart","\App\Http\Controllers\\cart@checkout");
 Route::post("/cart/delete","\App\Http\Controllers\\cart@delete");
+Route::post("/cart/quantity","\App\Http\Controllers\\cart@quantity");
 
 // orders (for seller)
 Route::get("/orders","\App\Http\Controllers\\orders@main");

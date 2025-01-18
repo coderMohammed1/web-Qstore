@@ -39,7 +39,7 @@ CREATE TABLE cart (
 
 alter table cart
 add constraint totalcons check(total>=0.00);
-
+------------------------
 create table orders(
 ID int primary key auto_increment,
 price decimal(10,2) not null,
@@ -92,6 +92,9 @@ foreign key(order_id) references orders(ID)
 
 alter table users 
 add column password text not null;
+
+alter table Order_Product 
+add column quantity int not null default 1;
 -----------------------------------------------------------------------------------------
 ALTER TABLE users CHANGE age birthdate DATE;
 alter table users drop column shipping_info;
