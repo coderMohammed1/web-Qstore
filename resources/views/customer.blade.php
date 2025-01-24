@@ -42,6 +42,10 @@
                     <p> Price: {{$product["price"]}}$</p>
                 </div>
 
+                <div style="border-bottom: 1px red solid;">
+                    <p> Quantity: {{$product["quantity"]}}</p>
+                </div>
+
                 <form action = "/product/description" method = "post">
                     @csrf
                     <div style="border-bottom: 1px red solid;">   

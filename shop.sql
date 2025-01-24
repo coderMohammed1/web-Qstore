@@ -140,7 +140,10 @@ alter table users drop column userName;
 alter table users add column token varchar(500) unique;
 ------------------------------------------------------
 alter table product add column type varchar(15) not null;
+alter table product add column quantity int not null default 1;
+alter table product
+add constraint pquantcon check(quantity>=0);
 ------------------------------------------------------
-select * from cart;
+select * from product;
 -- TODO add delivered col to orders table
 -- SET FOREIGN_KEY_CHECKS = 1;

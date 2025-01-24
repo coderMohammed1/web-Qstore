@@ -38,11 +38,15 @@
             @csrf
             <label  class="form-label" for="">Product name:</label>
             <input required type="text"  class="form-control" name="pname" id="" autocomplete="off">
-            <label  class="form-label" for="">Price:</label>
 
+            <label  class="form-label" for="">Price:</label>
             <input required  class="form-control" type="number" name="price" maxlength="25">
+
             <label  class="form-label" for="">Manufacturer:</label>
             <input required type="text"  class="form-control" name="Manu" id="">
+
+            <label class="form-label" for="">Quantity</label>
+            <input required type="number" class="form-control" name="pquant" id="" title="this will get dynamically updated when users checksout!">
 
             <label  class="form-label" for="">Descreption:</label>
             <textarea required  class="form-control" id="tex" name="desc" rows="2" autocomplete="off"></textarea>

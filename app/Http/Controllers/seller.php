@@ -49,7 +49,7 @@ class seller extends BaseController
 
              $allowedExtensions = array("jpg", "jpeg", "png", "gif","bmp", "tiff", "tif", "webp", "ico", "heic", "heif", "jfif", "psd", "raw", "eps", "ai", "cdr");
 
-             $prod = self::$database->prepare("INSERT INTO product(p_name,price,Manfacturer,seller,description,img,type) VALUES(:pname,:price,:manufact,:seller,:dsc,:img,:ty)");
+             $prod = self::$database->prepare("INSERT INTO product(p_name,price,Manfacturer,seller,description,img,type,quantity) VALUES(:pname,:price,:manufact,:seller,:dsc,:img,:ty,:q)");
              $prod->bindValue("pname",htmlspecialchars($_POST['pname'], ENT_QUOTES, 'UTF-8'));
 
              $prod->bindValue("price",htmlspecialchars($_POST['price'], ENT_QUOTES, 'UTF-8'));
@@ -57,6 +57,8 @@ class seller extends BaseController
 
              $prod->bindValue("seller",htmlspecialchars($_POST['sell'], ENT_QUOTES, 'UTF-8'));
              $prod->bindValue("dsc",htmlspecialchars($_POST['desc'], ENT_QUOTES, 'UTF-8'));
+
+             $prod->bindValue("q",htmlspecialchars($_POST['pquant'], ENT_QUOTES, 'UTF-8')); // DB constraint chck is applied as well
 
              if (in_array(strtolower(pathinfo($_FILES["img"]['name'], PATHINFO_EXTENSION)), $allowedExtensions)){
                     $prod->bindValue("img",file_get_contents($_FILES["img"]['tmp_name']));

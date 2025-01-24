@@ -61,6 +61,7 @@
                             <form method="POST" action="/cart/delete">@csrf <button name="delc" value="{{$product['cpid']}}" class="del">delete</button></form>
                             <input title="Update the page to see the new total!" type="number" class="quant" value="{{$product['quant']}}">
                             <input type="hidden" name="pid" id="pid" value="{{$product['cpid']}}">
+                            <input type="hidden" name="rpid" id="rpid" value="{{$product['pid']}}">
                         </div>
                     </div>
                 </div>
@@ -68,6 +69,10 @@
             <br>
             <p style="margin-left: 5%">total: {{$product["tot"]}}$</p>    
         </main>
+    @endif
+
+    @if(isset($invalid)) {{--for quanity checks--}}
+        <script>alert($invalid);</script>
     @endif
         
     @if(isset($Done))

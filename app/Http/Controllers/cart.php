@@ -7,6 +7,7 @@ use PDO;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Log;
 
 class cart extends BaseController
 {
@@ -177,7 +178,7 @@ class cart extends BaseController
                 if($delp->execute()){
 
                     // update the total as the items got deleted
-                    $total = self::$database->prepare("SELECT product.price,quantity
+                    $total = self::$database->prepare("SELECT product.price,cart_products.quantity
                     FROM cart_products JOIN product ON product.ID = cart_products.product 
                     WHERE cart = :id");
                     $total->bindParam("id",$_SESSION["cust"]->cart);
@@ -222,10 +223,22 @@ class cart extends BaseController
     function quantity(){
         session_start();
         if(isset($_SESSION["cust"])){
-            // add rules
-            if(isset($_POST["number"]) and $_POST["number"] > 0){ //TODO:edit this when we implement the soldout
-                self::$database->beginTransaction(); // start trasction
+            $quant = 1;
+            self::$database->beginTransaction(); // start trasction
 
+            $checkQuant = self::$database->prepare("SELECT quantity FROM product WHERE ID = :pid");
+            $checkQuant->bindParam("pid",$_POST["pid"]);
+            
+            if($checkQuant->execute()){
+                $row = $checkQuant->fetch(PDO::FETCH_ASSOC);
+                $quant = $row["quantity"];
+            }else{
+                self::$database->rollBack();
+                return "error";
+            }
+
+            if(isset($_POST["number"]) and $_POST["number"] > 0 and $_POST["number"] <= $quant){ 
+                
                 try{
                     $controlQ = self::$database->prepare("UPDATE cart_products SET quantity = :quant WHERE ID = :pid AND cart = :cart");
                     $controlQ->bindValue("quant",htmlspecialchars($_POST['number'], ENT_QUOTES, 'UTF-8'));
@@ -234,7 +247,7 @@ class cart extends BaseController
 
                     if($controlQ->execute()){
                         // update the total as the quanity got updated
-                        $total = self::$database->prepare("SELECT product.price,quantity
+                        $total = self::$database->prepare("SELECT product.price,cart_products.quantity as quantity
                         FROM cart_products JOIN product ON product.ID = cart_products.product 
                         WHERE cart = :id");
                         $total->bindParam("id",$_SESSION["cust"]->cart);
@@ -271,8 +284,10 @@ class cart extends BaseController
                     return "error";
                 }
 
+            }else{
+                return "Invalid quantity, pleas check the product available quantity first!";
             }
-
+            
         }else{
             return redirect("/signin");
         }

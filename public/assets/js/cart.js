@@ -36,6 +36,7 @@ document.querySelectorAll(".quant").forEach((quantityInput) => {
         if (isValid(parseInt(quant))) {
             // Get the sibling hidden input's value for the product ID
             let pid = this.parentNode.querySelector('input[name="pid"]').value;
+            let rpid = this.parentNode.querySelector('input[name="rpid"]').value; // the real product id in the product table
 
             // Send the AJAX request
             $.ajax({
@@ -44,10 +45,15 @@ document.querySelectorAll(".quant").forEach((quantityInput) => {
                 contentType: 'application/x-www-form-urlencoded',
                 data: {
                     number: quant,
-                    prod: pid
+                    prod: pid,
+                    pid: rpid
                 },
                 success: function (response) {
-                    console.log("Server says:", response);
+                    if(response == "Invalid quantity, pleas check the product available quantity first!"){
+                        alert(response);
+                    }else{
+                     console.log("Server says:", response);
+                    }
                 },
                 error: function (error) {
                     console.error('Error updating quantity:', error);

@@ -76,6 +76,17 @@
                     </form>
                 </div>
 
+                <div style="border-bottom: 1px red solid;">
+                    <form style="display: flex;" action="/editProducts" method="post">
+                        @csrf
+                        Quantity:<input name="equant" type="text" class="inputs" value=" {{$product['quantity']}}" title='make me 0 in case of soldout!'>
+
+                         <button value="{{$product['ID']}}" title="confirm the edit" type="submit" style="border: none; background: none; padding: 0;" name="editquant">
+                            <i style="font-size:24px; margin-left:5px" class="fa">&#xf040;</i>
+                        </button>
+                    </form>
+                </div>
+
                 <form action = "/product/description" method = "post">
                     @csrf
                     <div style="border-bottom: 1px red solid;">   

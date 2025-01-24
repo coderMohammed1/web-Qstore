@@ -70,6 +70,22 @@ class editp extends BaseController
 
             }
 
+            if(isset($_POST["equant"])){
+                // edit product's quantity
+
+               $pq = self::$database->prepare("UPDATE product SET quantity = :q WHERE seller = :seller AND ID = :id");
+               $pq->bindValue("q",htmlspecialchars($_POST['equant'], ENT_QUOTES, 'UTF-8'));
+               $pq->bindParam("seller",$_SESSION["info"]->ID); // no IDOR with this guy
+               $pq->bindParam("id",$_POST["editquant"]);
+
+               if($pq->execute()){
+                   return redirect("/editProducts")->with("succsess","Your product has been updated succsessfully!");
+               }else{
+                   return redirect("/editProducts")->with("error","Somthing went wrong!");
+               }
+
+           }
+
             if(isset($_POST["price2"])){
                 // edit product's price
 

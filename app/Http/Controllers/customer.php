@@ -31,7 +31,7 @@ class customer extends BaseController
 
         if(isset($_SESSION["info"]) and $_SESSION["info"]->roles == "c"){ 
 
-            $data = self::$database->prepare("SELECT img,type,p_name,price,ID FROM product ORDER BY ID DESC LIMIT 30");
+            $data = self::$database->prepare("SELECT img,type,quantity,p_name,price,ID FROM product ORDER BY ID DESC LIMIT 30");
             
             if($data->execute()){
                 $results = $data->fetchAll(PDO::FETCH_ASSOC);
@@ -52,7 +52,7 @@ class customer extends BaseController
             if(isset($_POST["send01"])){
                 $searchv = "%".$_POST["search"]."%";
               
-                $data = self::$database->prepare("SELECT img,type,p_name,price,ID FROM product WHERE p_name LIKE :pname OR Manfacturer LIKE :man ORDER BY ID DESC LIMIT 30");
+                $data = self::$database->prepare("SELECT img,type,p_name,price,ID,quantity FROM product WHERE p_name LIKE :pname OR Manfacturer LIKE :man ORDER BY ID DESC LIMIT 30");
                 $data->bindParam("pname",$searchv);
                 $data->bindParam("man",$searchv);
 
@@ -76,19 +76,37 @@ class customer extends BaseController
                 self::$database->beginTransaction(); // start transction
 
                 try{
+                    $pqu = self::$database->prepare("SELECT quantity FROM product WHERE ID = :pid"); // soldout
+                    $pqu->bindParam("pid",$_POST["buy"]);
+
+                    if($pqu->execute()){
+                        $row = $pqu->fetch(PDO::FETCH_ASSOC);
+                        $quant = $row["quantity"];
+
+                        if($quant <= 0){ // TODO:: test this more
+                            self::$database->rollBack();
+                            return view("error")->with("error","this product is not available!");
+                        }
+
+                    }else{
+                        self::$database->rollBack();
+                        return view("error")->with("error","somthing went wrong!");
+                    }
+
                     $add = self::$database->prepare("INSERT INTO cart_products(cart,product,quantity) values(:cart,:prod,1)");
                     $add->bindParam("cart",$_SESSION["cust"]->cart);
                     $add->bindParam("prod",$_POST["buy"]);
 
                     if($add->execute()){
 
-                        $total = self::$database->prepare("SELECT product.price,quantity
+                        $total = self::$database->prepare("SELECT product.price,cart_products.quantity as quantity,product.quantity as pquant
                         FROM cart_products JOIN product ON product.ID = cart_products.product 
                         WHERE cart = :id");
 
                         $total->bindParam("id",$_SESSION["cust"]->cart);
 
                         if($total->execute()){
+
                             $sum = 0;
                             foreach($total as $tot){
                                 $sum += $tot["price"]*$tot["quantity"];
