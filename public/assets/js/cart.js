@@ -53,6 +53,19 @@ document.querySelectorAll(".quant").forEach((quantityInput) => {
                         alert(response);
                     }else{
                      console.log("Server says:", response);
+
+                      // Make a GET request to /cart after the POST request is successful. this request will help in keeping session information about products up-todate
+                      $.ajax({
+                        url: '/cart',
+                        type: 'GET',
+                        success: function (cartResponse) {
+                            console.log("Updated cart data");
+                        },
+                        error: function (error) {
+                            console.error('Error');
+                        }
+                    });
+                    
                     }
                 },
                 error: function (error) {

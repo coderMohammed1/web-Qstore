@@ -91,14 +91,43 @@ class cart extends BaseController
                         $oid = $currentOrder->fetchObject()->ID;
                         $coreect = true;
 
-                        $same_seller = -1; //just to check if the current product share the same seller with las one
+                        $same_seller = -1; //just to check if the current product share the same seller with last one
                         foreach ($_SESSION["prods"] as $prod) {
+                            $quant_check = self::$database->prepare("SELECT quantity FROM product WHERE ID = :pid");
+                            $quant_check->bindParam("pid",$prod["pid"]);
+                            $cq = "";
+
+                            if($quant_check->execute()){
+                                $cq = $quant_check->fetchObject();
+
+                                if($cq->quantity < $prod["quant"]){ // if not enough !
+                                    self::$database->rollBack();
+                                    return view("cart")->with("error","the product: {$prod['pname']} is not enough, pleas consider lowering the quantity!")
+                                    ->with("refrech","ref");
+                                }
+
+                            }else{
+                                self::$database->rollBack();
+                                return view("error")->with("error","somthing went wrong!");
+                            }
+
                             $copy = self::$database->prepare("INSERT INTO Order_Product(order_id, product) VALUES(:order, :product)");
                             $copy->bindParam("order", $oid);
                             $copy->bindParam("product", $prod["pid"]);
 
-                            //mycustomers table
-                        
+                            // update the quantity
+                            $uq = self::$database->prepare("UPDATE product SET quantity = :cp - :cusp WHERE ID = :pid");
+                            $uq->bindParam("cp",$cq->quantity);
+
+                            $uq->bindParam("cusp",$prod["quant"]);
+                            $uq->bindParam("pid",$prod["pid"]);
+
+                            if(!$uq->execute()){
+                                self::$database->rollBack();
+                                return view("error")->with("error","somthing went wrong!");
+                            }
+
+                            //mycustomers table                        
                             $seller = $prod["sellerid"];
                             
                             if($same_seller != $seller){

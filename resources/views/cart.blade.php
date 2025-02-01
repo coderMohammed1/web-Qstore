@@ -86,6 +86,15 @@
             {{ $error }} 
         </div>
     @endif
+
+    @if (isset($refrech))
+        <script>
+            setTimeout(() => {
+                window.location.replace(window.location.href);
+             }, 4000); 
+
+        </script>
+    @endif
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="assets/js/cart.js"></script>    
 </body>
