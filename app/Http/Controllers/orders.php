@@ -27,7 +27,6 @@ class orders extends BaseController
         session_start();
 
         if(isset($_SESSION["info"]) and $_SESSION["info"]->roles = "s"){
-            // think about huge sellers so u may need to limit and add search
             
             $orders = self::$database->prepare("SELECT 
             mycustomers.sid as sellerid,

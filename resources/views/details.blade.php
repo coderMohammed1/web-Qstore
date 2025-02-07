@@ -77,6 +77,10 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Price: {{$item['price']}}</li>
                     </ul>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">quantity: {{$item['oq']}}</li>
+                    </ul>
                 </div>
             </div>
             @endforeach

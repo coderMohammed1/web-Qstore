@@ -41,13 +41,14 @@ class odetails extends BaseController
                     product.ID AS pid, 
                     product.p_name AS pname, 
                     product.price AS price, 
-                    product.Manfacturer AS manufacturer 
+                    product.Manfacturer AS manufacturer,
+                    order_product.quantity as oq 
                 FROM 
-                    Order_Product 
+                    order_product 
                 JOIN 
-                    product ON product.ID = Order_Product.product 
+                    product ON product.ID = order_product.product 
                 JOIN 
-                    orders ON Order_Product.order_id = orders.ID 
+                    orders ON order_product.order_id = orders.ID 
                 WHERE 
                     orders.user_id = :cid 
                     AND product.seller = :sid

@@ -111,9 +111,10 @@ class cart extends BaseController
                                 return view("error")->with("error","somthing went wrong!");
                             }
 
-                            $copy = self::$database->prepare("INSERT INTO Order_Product(order_id, product) VALUES(:order, :product)");
+                            $copy = self::$database->prepare("INSERT INTO order_product(order_id, product,quantity) VALUES(:order, :product,:pquant)");
                             $copy->bindParam("order", $oid);
                             $copy->bindParam("product", $prod["pid"]);
+                            $copy->bindParam("pquant", $prod["quant"]);
 
                             // update the quantity
                             $uq = self::$database->prepare("UPDATE product SET quantity = :cp - :cusp WHERE ID = :pid");
@@ -322,4 +323,24 @@ class cart extends BaseController
         }
     }
 
+    function deleteAll(){
+        session_start();
+    
+        if(isset($_SESSION["cust"])){
+            $delete_cart = self::$database->prepare("DELETE FROM cart_products WHERE cart = :caid");
+            $delete_cart->bindParam("caid",$_SESSION["cust"]->cart); 
+    
+            if($delete_cart->execute()){
+                return redirect("/cart");
+            }else{
+                return view("error")->with("error","somthing went wrong!");
+            }
+    
+        }else{
+            return redirect("/signin");
+        }
+    
+    }
+
 }
+

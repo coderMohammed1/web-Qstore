@@ -24,6 +24,10 @@
             justify-content: center;
         }
 
+        #f1 form {
+            display: contents;
+        }
+
         #btn {
             width: 50% !important;
         }
@@ -35,11 +39,17 @@
     <div class="container">
         <div id="sh" class="shadow p-3 mb-1 bg-body rounded"> Welcome {{$_SESSION["info"]->First_Name}}</div>
 
-        <form id="f1" method="POST">
-            @csrf
-            <button class="btn btn-outline-secondary mt-3" id="btn" name="out" type="submit">check out</button>
-            <a id="btn" class="btn btn-outline-warning mt-3" name="update" href="https://'.$ip.'/qmaker/profile.php">delete all items!</a>
-        </form>
+        <div id="f1">
+            <form method="POST">
+                @csrf
+                <button class="btn btn-outline-secondary mt-3" id="btn" name="out" type="submit">check out</button>
+            </form>
+
+            <form action="/cart/delete/all" method="POST">
+                @csrf
+                 <button id="btn" class="btn btn-outline-warning mt-3" name="delall">Delete all items!</button>
+            </form>
+        </div>
     </div>
 
     <br>
@@ -57,6 +67,7 @@
                                 <h3 class="price">{{$product["price"]}}$</h3>
                             </div>
                         </div>
+                        
                         <div class="inputs" style="display: flex;">
                             <form method="POST" action="/cart/delete">@csrf <button name="delc" value="{{$product['cpid']}}" class="del">delete</button></form>
                             <input title="Update the page to see the new total!" type="number" class="quant" value="{{$product['quant']}}">
