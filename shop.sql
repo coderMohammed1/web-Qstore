@@ -51,7 +51,9 @@ foreign key (user_id) references users(ID)
 alter table orders
 add constraint opricecons check(price>=0.00);
 
-
+alter table orders
+drop column diliverd;
+---------
 create table product(
 ID int primary key auto_increment,
 p_name varchar(70) not null,
@@ -144,6 +146,6 @@ alter table product add column quantity int not null default 1;
 alter table product
 add constraint pquantcon check(quantity>=0);
 ------------------------------------------------------
-select * from product;
--- TODO add delivered col to orders table
+select * from users;
+
 -- SET FOREIGN_KEY_CHECKS = 1;

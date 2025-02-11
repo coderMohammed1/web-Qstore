@@ -56,8 +56,10 @@ Route::post("/cart/quantity","\App\Http\Controllers\\cart@quantity");
 
 // orders (for seller)
 Route::get("/orders","\App\Http\Controllers\\orders@main");
-Route::get("/details","\App\Http\Controllers\\odetails@main");
 Route::post("/orders","\App\Http\Controllers\\orders@search");
+// order's details
+Route::get("/details","\App\Http\Controllers\\odetails@main");
+Route::post("/details","\App\Http\Controllers\\odetails@dileverd");
 
 //Forgot password
 Route::get("/resetp","\App\Http\Controllers\\reset@main");

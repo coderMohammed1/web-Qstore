@@ -61,7 +61,7 @@
             <div class="col-12">
                 <form id="f1" method="POST" class="mt-3">
                     @csrf
-                    <button class="btn btn-outline-secondary w-100" id="btn" name="dilivered" type="submit">Delivered!</button>
+                    <button class="btn btn-outline-secondary w-100" id="btn" value="{{$customerdet[0]['mid']}}" name="dilivered" type="submit">Delivered!</button>
                 </form>
             </div>
         </div>

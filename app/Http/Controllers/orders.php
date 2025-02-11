@@ -36,7 +36,7 @@ class orders extends BaseController
             users.email as email
             FROM mycustomers
             JOIN users ON mycustomers.cust_id = users.ID
-            WHERE mycustomers.sid = :se LIMIT 30");
+            WHERE mycustomers.sid = :se LIMIT 30"); // when u diliver somthing the guy should be deleted from this table 
 
 
             $orders->bindParam("se",$_SESSION["info"]->ID);

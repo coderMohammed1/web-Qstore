@@ -27,7 +27,7 @@ class odetails extends BaseController
         session_start();
 
         if(isset($_SESSION["info"])){
-            $check = self::$database->prepare("SELECT First_Name,email,street,city,country FROM mycustomers 
+            $check = self::$database->prepare("SELECT mycustomers.cust_id as mid,First_Name,email,street,city,country FROM mycustomers 
             JOIN users ON users.ID = mycustomers.cust_id
             JOIN customer ON customer.cust_id = :cid
              WHERE mycustomers.cust_id = :cid AND sid = :sid");
@@ -68,6 +68,29 @@ class odetails extends BaseController
             return redirect("signin");
         }
         
+    }
+
+    function dileverd(){
+        session_start();
+
+        if(isset($_SESSION["info"]) and $_SESSION["info"]->roles == "s"){
+            if(isset($_POST["dilivered"])){
+                $dil = self::$database->prepare("DELETE FROM mycustomers WHERE cust_id = :cid AND sid = :seller");
+                $dil->bindParam("seller",$_SESSION["info"]->ID);
+                $dil->bindParam("cid",$_POST["dilivered"]);
+
+                if($dil->execute()){
+                    return redirect("/orders");
+                }else{
+                    return redirect("/error")->with("error","somthing went wrong!");
+                }
+
+            }
+
+        }else{
+            return redirect("/signin");
+        }
+
     }
   
 }
