@@ -1,151 +1,93 @@
-create database Qshop;
-use Qshop;
+CREATE DATABASE IF NOT EXISTS Qshop;
+USE Qshop;
 
 ALTER DATABASE Qshop
 CHARACTER SET utf8mb4
 COLLATE utf8mb4_general_ci;
 
--- init the tables
-
--- ! Roles will be ethier s for seller or c for customer
-create table users(
-ID INT primary key auto_increment,
-First_Name varchar(40) not null,
-Last_name varchar(40) not null,
-roles char(1) not null, -- for knowing if user a seler or buyer
-userName varchar(30) unique not null,
-age date not null,
-shipping_info text not null
-) auto_increment = 1;
-
-alter table users
-add constraint rolescons check(roles = 's' or roles = 'c'); 
-
-alter table users
-add column isactive boolean;
-
-alter table users 
-modify column isactive int default 0; 
-
-alter table users
-add column email varchar(70) unique;
+-- Initialize the tables
+-- Roles will be either 's' for seller or 'c' for customer
+CREATE TABLE users (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    First_Name VARCHAR(40) NOT NULL,
+    Last_Name VARCHAR(40) NOT NULL,
+    roles CHAR(1) NOT NULL, -- 's' for seller, 'c' for customer
+    birthdate DATE NOT NULL,
+    email VARCHAR(70) UNIQUE,
+    password TEXT NOT NULL,
+    token VARCHAR(500) UNIQUE,
+    isactive INT DEFAULT 0
+) AUTO_INCREMENT=1;
 
 CREATE TABLE cart (
     ID INT PRIMARY KEY AUTO_INCREMENT,
-    total DECIMAL(10, 2) NOT NULL,
+    total DECIMAL(10, 2) NOT NULL CHECK (total >= 0.00),
     user_id INT NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(ID)
-)auto_increment = 1;
+) AUTO_INCREMENT=1;
 
-alter table cart
-add constraint totalcons check(total>=0.00);
-------------------------
-create table orders(
-ID int primary key auto_increment,
-price decimal(10,2) not null,
-odate date default(CURRENT_TIMESTAMP),
-user_id int not null,
-foreign key (user_id) references users(ID)
-)auto_increment = 1;
+CREATE TABLE orders (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    price DECIMAL(10,2) NOT NULL CHECK (price >= 0.00),
+    odate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(ID)
+) AUTO_INCREMENT=1;
 
-alter table orders
-add constraint opricecons check(price>=0.00);
-
-alter table orders
-drop column diliverd;
----------
-create table product(
-ID int primary key auto_increment,
-p_name varchar(70) not null,
-price decimal(10,2) not null,
-Manfacturer varchar(50),
-seller int not null,
-foreign key(seller) references users(ID)
-)auto_increment = 1;
-
-alter table product
-add constraint ppricecons check(price>=0.00);
-
-alter table product 
-add column description text not null;
-
-alter table product 
-add column img MEDIUMBLOB not null;
+CREATE TABLE product (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    p_name VARCHAR(70) NOT NULL,
+    price DECIMAL(10,2) NOT NULL CHECK (price >= 0.00),
+    Manfacturer VARCHAR(50),
+    seller INT NOT NULL,
+    description TEXT NOT NULL,
+    img MEDIUMBLOB NOT NULL,
+    type VARCHAR(15) NOT NULL,
+    quantity INT NOT NULL DEFAULT 1 CHECK (quantity >= 0),
+    FOREIGN KEY (seller) REFERENCES users(ID)
+) AUTO_INCREMENT=1;
 
 CREATE INDEX pname ON product(p_name);
 CREATE INDEX man ON product(Manfacturer);
--- many to many
-create table cart_products(
-ID int primary key auto_increment,
-cart int,
-product int,
-foreign key(cart) references cart(ID),
-foreign key(product) references product(ID)
-)auto_increment = 1;
 
-alter table cart_products add column quantity INT default 1 NOT NULL;
--- many to many
-create table Order_Product(
-order_id int not null,
-product int not null,
-foreign key (product) references product(ID),
-foreign key(order_id) references orders(ID)
-)auto_increment = 1;
+-- Many-to-many relationships
+CREATE TABLE cart_products (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    cart INT NOT NULL,
+    product INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    FOREIGN KEY (cart) REFERENCES cart(ID),
+    FOREIGN KEY (product) REFERENCES product(ID)
+) AUTO_INCREMENT=1;
 
-alter table users 
-add column password text not null;
+CREATE TABLE Order_Product (
+    order_id INT NOT NULL,
+    product INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    FOREIGN KEY (product) REFERENCES product(ID),
+    FOREIGN KEY (order_id) REFERENCES orders(ID)
+) AUTO_INCREMENT=1;
 
-alter table Order_Product 
-add column quantity int not null default 1;
------------------------------------------------------------------------------------------
-ALTER TABLE users CHANGE age birthdate DATE;
-alter table users drop column shipping_info;
-
--------------------------------------------------------------------------------------------
-create table customer(
-cust_id int unique,
-city varchar(55),
-street varchar(55),
-country varchar (50)
+CREATE TABLE customer (
+    cust_id INT UNIQUE NOT NULL,
+    city VARCHAR(55),
+    street VARCHAR(55),
+    country VARCHAR(50),
+    cart INT,
+    FOREIGN KEY (cust_id) REFERENCES users(ID),
+    FOREIGN KEY (cart) REFERENCES cart(ID)
 );
 
-alter table customer
-add constraint custfk foreign key(cust_id) references users(ID);
-
-alter table customer add column cart INT;
-alter table customer add constraint cartfk foreign key(cart) references cart(ID);
-
-create table seller(
-seller_id int unique,
-total_sales decimal(15,3)
+CREATE TABLE seller (
+    seller_id INT UNIQUE NOT NULL,
+    total_sales DECIMAL(15,3) DEFAULT 0.000,
+    FOREIGN KEY (seller_id) REFERENCES users(ID)
 );
 
-------------------------------------
-create table mycustomers(
- ID int unique auto_increment,
- cust_id INT,
- sid INT
-);
-alter table mycustomers
-add constraint mycustfk foreign key(cust_id) references users(ID);
-
-alter table mycustomers
-add constraint mycustsfk foreign key(sid) references users(ID);
-------------------------------------------------------------------
-alter table seller
-add constraint sellfk foreign key(seller_id) references users(ID);
-
-alter table seller
-modify column total_sales decimal(15,3) default 0.000; 
---------------------------------------------------------------
-alter table users drop column userName;
-alter table users add column token varchar(500) unique;
-------------------------------------------------------
-alter table product add column type varchar(15) not null;
-alter table product add column quantity int not null default 1;
-alter table product
-add constraint pquantcon check(quantity>=0);
-------------------------------------------------------
-select * from users;
-
--- SET FOREIGN_KEY_CHECKS = 1;
+CREATE TABLE mycustomers (
+    ID INT UNIQUE AUTO_INCREMENT,
+    cust_id INT NOT NULL,
+    sid INT NOT NULL,
+    FOREIGN KEY (cust_id) REFERENCES users(ID),
+    FOREIGN KEY (sid) REFERENCES users(ID)
+) AUTO_INCREMENT=1;
