@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/laravel/compare/v11.1.1...11.x)
+## [Unreleased](https://github.com/laravel/laravel/compare/v1.0.0...master)
+
+## [v1.0.0](https://github.com/laravel/laravel/compare/v11.1.1...v1.0.0) - 2025-02-12
+
+this version is the first completed version with only the basic things that you expect in a web-based E-commerce system!
 
 ## [v11.1.1](https://github.com/laravel/laravel/compare/v11.1.0...v11.1.1) - 2024-06-04
 
