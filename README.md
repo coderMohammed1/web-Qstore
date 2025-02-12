@@ -20,3 +20,5 @@ Q-STORE is a simple laravel based E-comerce system!
 7- configure ur gmail as shown in this vedio:  https://www.youtube.com/watch?v=zxFXnLEmnb4&t=87s
 
 8- if you face any issues enable the debug mode by editing .env
+
+**NOTE**: if you are using windows, then I recommand you to use xampp (latest version) and mysql workbench with a sql server. In case of linux: u can handle it!
