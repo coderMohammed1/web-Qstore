@@ -11,7 +11,7 @@ Q-STORE is a simple laravel based E-comerce system!
 
 3- setup mysql db (use the shop.sql file)
 
-4- follow this vedio for cloning and further setup: https://www.youtube.com/watch?v=9qaiY3ycpwY (slip the db part here (except that u need to do migrate anyway))
+4- follow this vedio for cloning and further setup: https://www.youtube.com/watch?v=9qaiY3ycpwY (skip the db part here (except that u need to do migrate anyway))
 
 5- run the shop.sql
 
