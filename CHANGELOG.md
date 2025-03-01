@@ -1,6 +1,11 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/laravel/compare/v1.0.1...master)
+## [Unreleased](https://github.com/laravel/laravel/compare/v1.0.2...master)
+
+## [v1.0.2](https://github.com/laravel/laravel/compare/v1.0.1...v1.0.2) - 2025-03-01
+
+New Release: Enhanced Security with reCAPTCHA & Secure Headers
+This update introduces reCAPTCHA integration for bot protection and security headers to strengthen defenses against attacks. This update improves user safety, prevents automated abuse, and enhances overall security.
 
 ## [v1.0.1](https://github.com/laravel/laravel/compare/v1.0.0...v1.0.1) - 2025-02-23
 
