@@ -12,6 +12,7 @@
             margin-top: 5px;
         }
     </style>
+     <script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
 
 <body>
@@ -49,7 +50,7 @@
 
             <div id = "customerf"></div>
             <br>
-            <button class="btn btn-outline-dark" type="submit" name="reg_sub" id="mo">Register</button>
+            <button class="g-recaptcha btn btn-outline-dark" data-sitekey="{{config('services.recaptcha.site_key')}}" data-callback='onSubmit'  data-action='register' type="submit" name="reg_sub" id="mo">Register</button>
             <a class="btn btn-outline-success" href="/signin">Sign in instead</a>
             <a class="btn btn-outline-warning" href="/assets/html/passwords.html" target="_blank">Review password policy</a>
         </form>
@@ -70,5 +71,10 @@
     {{-- <script>
         alert("Password: allowed symbols: 0-9 and a-z and A-Z and @ and # and _. Your password should contain 8 or more characters and at least: one capital letter, one small letter, and one number.");
     </script> --}}
+    <script>
+        function onSubmit(token) {
+           document.getElementById("sig").submit(); //form id
+        }
+    </script>
 </body>
 </html>

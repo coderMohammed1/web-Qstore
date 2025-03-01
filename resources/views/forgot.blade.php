@@ -13,17 +13,18 @@
             
         }
     </style>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
 <body>
     @include("nav")
     <div class="container" style="width:65%; margin-top: 60px">
-        <form action="/resetp" method="POST">
+        <form id = "forg" action="/resetp" method="POST">
             @csrf
             <label class="form-label">email:</label>
             <input name="remail" required type="email" class="form-control">
 
             <br>
-            <button name="reset" style="width: 100%" type="submit" class="btn btn-outline-warning">Send!</button>
+            <button style="width: 100%" type="submit" class="g-recaptcha btn btn-outline-warning" data-sitekey="{{config('services.recaptcha.site_key')}}" data-callback='onSubmit' data-action='submit'>Send!</button>
         </form>
     </div>
 
@@ -32,5 +33,11 @@
                 {{ $Done }} 
             </div>
     @endif
+
+    <script>
+        function onSubmit(token) {
+           document.getElementById("forg").submit(); //form id
+        }
+    </script>
 </body>
 </html>

@@ -623,6 +623,7 @@ return [
         "'self'",
         "https://cdn.jsdelivr.net",
         "https://cdnjs.cloudflare.com",
+        "https://www.google.com",
     ],
 
     // ✅ Allow Bootstrap & FontAwesome scripts
@@ -630,6 +631,7 @@ return [
         "'self'",
         "https://cdn.jsdelivr.net",
         "https://cdnjs.cloudflare.com",
+        "https://www.google.com",
         "'unsafe-inline'", // Needed for Bootstrap's navbar toggler
         "'unsafe-eval'",   // Needed for some Bootstrap JS features
     ],
@@ -665,6 +667,7 @@ return [
         "'self'",
         "https://cdn.jsdelivr.net",
         "https://cdnjs.cloudflare.com",
+        "https://www.google.com",
     ],
 
     // ✅ Allow iframes only from self

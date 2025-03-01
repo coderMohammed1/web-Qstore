@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use PDO;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Routing\Controller as BaseController;
+include("helpers.php");
 
 class seller extends BaseController
 {
@@ -45,6 +47,13 @@ class seller extends BaseController
 
             if($_SESSION["info"]->ID != $_POST["sell"]){
                 return view("error")->with("error","You are not authriezed!");
+            }
+
+            $recap = $_POST["g-recaptcha-response"];
+            $google_response = recaptcha($recap); // google recaptcha
+                    
+            if(!$google_response->json('success')){
+                return view("error")->with("error","we think you are a robot sir!");
             }
 
              $allowedExtensions = array("jpg", "jpeg", "png", "gif","bmp", "tiff", "tif", "webp", "ico", "heic", "heif", "jfif", "psd", "raw", "eps", "ai", "cdr");

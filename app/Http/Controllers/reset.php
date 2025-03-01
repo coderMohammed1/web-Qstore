@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\forgotp;
 use PDO;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use \Illuminate\Support\Facades\Mail;
 use \Illuminate\Support\Facades\Queue;
@@ -11,6 +12,7 @@ use App\Mail\mailer;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+
 
 class reset extends BaseController
 {
@@ -54,10 +56,21 @@ class reset extends BaseController
 
     function sendmail(){
         session_start();
-        //senmail part
-        if(isset($_POST["reset"])){
-            $email = htmlspecialchars($_POST['remail'], ENT_QUOTES, 'UTF-8');
+        //sendmail part
+        if(isset($_POST["remail"])){
+            $recap = $_POST["g-recaptcha-response"];
+            $google_response =  $g_response = Http::asForm()->post("https://www.google.com/recaptcha/api/siteverify",[
+                'secret' => config('services.recaptcha.secret_key'),
+                'response' => $recap,
+                'remoteip' => \request()->ip()
+            ]);  // google recaptcha
+            // Log::info($google_response->json());            
 
+            if(!$google_response->json('success')){
+                return view("forgot")->with("error","we think you are a robot sir!");
+            }
+            
+            $email = htmlspecialchars($_POST['remail'], ENT_QUOTES, 'UTF-8');
             $check_email = self::$database->prepare("SELECT token FROM users WHERE email = :email AND isactive = 1");
             $check_email->bindParam("email",$email);
 

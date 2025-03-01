@@ -29,12 +29,13 @@
         display: none;
     }
     </style>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
 <body>
     @include('nav')
 
     <main class="container mt-3">
-        <form action="/seller" method="post" enctype="multipart/form-data"> 
+        <form id="sellf" action="/seller" method="post" enctype="multipart/form-data"> 
             @csrf
             <label  class="form-label" for="">Product name:</label>
             <input required type="text"  class="form-control" name="pname" id="" autocomplete="off">
@@ -58,7 +59,8 @@
             </label>
 
             <br>
-            <button value="{{$_SESSION['info']->ID}}" class="btn btn-outline-success mt-3" name="sell" type="submit">Upload</button>
+            <button class="g-recaptcha btn btn-outline-success mt-3" data-sitekey="{{config('services.recaptcha.site_key')}}" data-callback='onSubmit'  data-action='register' type="submit">Upload</button>
+            <input type="hidden" value="{{$_SESSION['info']->ID}}" name="sell">
             <a class="btn btn-outline-warning mt-3" href="/editProducts">Edit your products</a>
         </form>
 
@@ -83,6 +85,12 @@
         this.style.height = `${this.scrollHeight}px`;
 
     });
+</script>
+
+<script>
+    function onSubmit(token) {
+       document.getElementById("sellf").submit(); //form id
+    }
 </script>
 </body>
 </html>

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use PDO;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -9,7 +10,7 @@ use Illuminate\Routing\Controller as BaseController;
 use \Illuminate\Support\Facades\Mail;
 use \Illuminate\Support\Facades\Queue;
 use App\Mail\mailer;
-
+include("helpers.php");
 class reg extends BaseController
 {
 
@@ -24,8 +25,8 @@ class reg extends BaseController
     }
 
     //POST
-    function register(){
-        if(isset($_POST["reg_sub"])){
+    function register(){  
+        if(isset($_POST["name"])){
             $database = new PDO("mysql:host=".config("dbenv.dbhost")."; dbname=".config("dbenv.dbname").";", config("dbenv.dbuname"), config("dbenv.dbpass"));
 
             $pattern = '/^[0-9a-zA-Z_@#]+$/';
@@ -58,12 +59,19 @@ class reg extends BaseController
                     $num = true;
                 }
             }
+            $recap = $_POST["g-recaptcha-response"];
+            $google_response = recaptcha($recap); // google recaptcha
+            // Log::info($google_response->json());            
+
+            if(!$google_response->json('success')){
+                return view("signup")->with("error","we think you are a robot sir!");
+            }
 
             if (
                 !$email or !$name or empty($_POST["name"]) or empty($_POST['age']) or !isset($_POST["name"]) 
                  or !isset($_POST["email"]) or !isset($_POST['age']) or !isset($_POST['password']) or empty($password2)
                  or !preg_match($pattern, $password2) or empty($_POST["lname"]) or !isset($_POST["lname"]) or
-                !$num or !$up or !$low or $paslen < 8 or ($role != "s" && $role != "c")
+                !$num or !$up or !$low or $paslen < 8 or ($role != "s" && $role != "c" )
             ) {
 
                 return view("signup")->with("error","Invalid data!");

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+include("helpers.php");
 
 class signin extends BaseController
 {
@@ -34,7 +35,15 @@ class signin extends BaseController
     //POST
     function signuser(){
         session_start();
-        if (isset($_POST["login"])){
+        if (isset($_POST["email"])){
+            $recap = $_POST["g-recaptcha-response"];
+            $google_response = recaptcha($recap); // google recaptcha
+            // Log::info($google_response->json());            
+
+            if(!$google_response->json('success')){
+                return view("signin")->with("error","we think you are a robot sir!");
+            }
+
             $user = self::$database->prepare("SELECT * FROM users where email = :email");
             $user->bindParam("email",$_POST["email"]);
            
