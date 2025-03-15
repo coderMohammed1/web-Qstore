@@ -29,6 +29,10 @@ return [
         'secret_key' => env('RECAPTCHA_SECRET_KEY'),
     ],
 
+    'JWT' => [
+        'key' => env("JWT_SECRET"),
+    ],
+
     'resend' => [
         'key' => env('RESEND_KEY'),
     ],

@@ -8,6 +8,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Illuminate\Validation\ValidationException;
 use Bepsvpt\SecureHeaders\SecureHeadersMiddleware; // Import the Secure Headers middleware
+use \App\Http\Middleware\Authorization; //api auth
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -19,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // Append Secure Headers Middleware
         $middleware->append(SecureHeadersMiddleware::class);
+
+        // // Register API authentication middleware
+        // $middleware->append(Authorization::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (Throwable $exception, Request $request) {
