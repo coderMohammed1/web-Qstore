@@ -49,6 +49,8 @@ CREATE TABLE product (
 
 CREATE INDEX pname ON product(p_name);
 CREATE INDEX man ON product(Manfacturer);
+ALTER TABLE product 
+CHANGE img img VARCHAR(255) NOT NULL;
 
 -- Many-to-many relationships
 CREATE TABLE cart_products (
@@ -91,3 +93,5 @@ CREATE TABLE mycustomers (
     FOREIGN KEY (cust_id) REFERENCES users(ID),
     FOREIGN KEY (sid) REFERENCES users(ID)
 ) AUTO_INCREMENT=1;
+
+select * from cart_products;

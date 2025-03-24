@@ -102,23 +102,54 @@ class editp extends BaseController
 
            }
 
-           if(isset($_FILES["img2"])){
+           if(isset($_FILES["img"])){
             // edit product's image
             $allowedExtensions = array("jpg", "jpeg", "png", "gif","bmp", "tiff", "tif", "webp", "ico", "heic", "heif", "jfif", "psd", "raw", "eps", "ai", "cdr");
 
-           if(in_array(strtolower(pathinfo($_FILES["img2"]['name'], PATHINFO_EXTENSION)), $allowedExtensions)){
-                $pnaem = self::$database->prepare("UPDATE product SET img = :img2, type = :ty WHERE seller = :seller AND id = :id");
+           if(in_array(strtolower(pathinfo($_FILES["img"]['name'], PATHINFO_EXTENSION)), $allowedExtensions)){
+                $pimg = self::$database->prepare("UPDATE product SET img = :img2, type = :ty WHERE seller = :seller AND id = :id");
 
-                $pnaem->bindValue("img2",file_get_contents($_FILES["img2"]['tmp_name']));
-                $pnaem->bindParam("seller",$_SESSION["info"]->ID); // no IDOR with this guy
-                $pnaem->bindParam("ty",$_FILES["img2"]["type"]);
-                $pnaem->bindParam("id",$_POST["pimg"]);
+                $img = $_FILES['img'];
+                    $fileSize = $img['size']; 
+                    $maxSize = 10 * 1024 * 1024; // 10MB
+                    if($fileSize > $maxSize){
+                        return view("seller")->with("error","File size should not be more then 10 MB!");
+                    }
 
-                if($pnaem->execute()){
+                    try{
+                        $imageInfo = getimagesize($img['tmp_name']); // MIME check
+                        if ($imageInfo === false) {
+                            return view("seller")->with("error","Invalid image!");
+                        }
+                    }catch(Exception $err){
+                        return view("seller")->with("error","Somthing wen wrong!");
+                    }
+                    
+                    if (preg_match('/\.(php[0-9]?|phtml|pht|phar)$/i', $img['name'])) { // to prevent double extention (may get executed on some misconfigured servers)
+                        return view("seller")->with("error", "Invalid file type!");
+                    }
+
+                    $imgName = htmlspecialchars($img['name'], ENT_QUOTES, 'UTF-8');
+                    $fileExtension = pathinfo($imgName, PATHINFO_EXTENSION);
+                    $uniqueName = uniqid('', true) . '.' . $fileExtension;
+                    $relativePath = 'uploads/' . $uniqueName; // so, only the relativePath is stored in the db
+                    $absolutePath = public_path($relativePath); 
+                    
+                    if (!move_uploaded_file($img['tmp_name'], $absolutePath)) {
+                        return view("seller")->with("error","somthing went wrong!");
+                    }
+
+                    $pimg->bindValue("img2",$relativePath);
+                    $pimg->bindParam("ty",$_FILES["img"]["type"]);
+                    $pimg->bindParam("seller",$_SESSION["info"]->ID); // no IDOR with this guy
+                    $pimg->bindParam("id",$_POST["pimg"]);
+
+                if($pimg->execute()){
                     return redirect("/editProducts")->with("succsess","Your product has been updated succsessfully!");
                 }else{
                     return redirect("/editProducts")->with("error","Somthing went wrong!");
                 }
+
             }else{
                 return view("error")->with("error","this extention is not allowed!");
             }

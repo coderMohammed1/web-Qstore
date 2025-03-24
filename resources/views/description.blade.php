@@ -30,7 +30,7 @@
         <br>
 
         <div style="display: flex; align-items: center; width:100%;">
-            <img style="margin: auto; max-width: 80%" src="{{'data:'.$product->type.';base64,'.base64_encode($product->img)}}" alt="error">
+            <img style="margin: auto; max-width: 80%" src="{{url($product->img)}}" alt="error">
         </div>
 
         <br>

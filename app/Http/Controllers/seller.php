@@ -7,6 +7,9 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Routing\Controller as BaseController;
+use phpDocumentor\Reflection\PseudoTypes\True_;
+use Exception;
+
 include("helpers.php");
 
 class seller extends BaseController
@@ -70,7 +73,38 @@ class seller extends BaseController
              $prod->bindValue("q",htmlspecialchars($_POST['pquant'], ENT_QUOTES, 'UTF-8')); // DB constraint chck is applied as well
 
              if (in_array(strtolower(pathinfo($_FILES["img"]['name'], PATHINFO_EXTENSION)), $allowedExtensions)){
-                    $prod->bindValue("img",file_get_contents($_FILES["img"]['tmp_name']));
+                    $img = $_FILES['img'];
+                    $fileSize = $img['size']; 
+                    $maxSize = 10 * 1024 * 1024; // 10MB
+                    if($fileSize > $maxSize){
+                        return view("seller")->with("error","File size should not be more then 10 MB!");
+                    }
+
+                    try{
+                        $imageInfo = getimagesize($img['tmp_name']); // MIME check
+                        if ($imageInfo === false) {
+                            return view("seller")->with("error","Invalid image!");
+                        }
+                        
+                    }catch(Exception $err){
+                        return view("seller")->with("error","Somthing wen wrong!");
+                    }
+
+                    if (preg_match('/\.(php[0-9]?|phtml|pht|phar)$/i', $img['name'])) { // to prevent double extention (may get executed on some misconfigured servers)
+                        return view("seller")->with("error", "Invalid file type!");
+                    }
+
+                    $imgName = htmlspecialchars($img['name'], ENT_QUOTES, 'UTF-8');
+                    $fileExtension = pathinfo($imgName, PATHINFO_EXTENSION);
+                    $uniqueName = uniqid('', true) . '.' . $fileExtension;
+                    $relativePath = 'uploads/' . $uniqueName; // so, only the relativePath is stored in the db
+                    $absolutePath = public_path($relativePath); 
+                    
+                    if (!move_uploaded_file($img['tmp_name'], $absolutePath)) {
+                        return view("seller")->with("error","somthing went wrong!");
+                    }
+
+                    $prod->bindValue("img",$relativePath);
                     $prod->bindParam("ty",$_FILES["img"]["type"]);
 
                     if($prod->execute()){

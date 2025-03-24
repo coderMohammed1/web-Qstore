@@ -31,7 +31,7 @@
             <div style="width: 300px; margin-left: 15px; margin-top: 4px; border: 2px blue solid; margin-bottom:7px">
 
                 <div style="border-bottom: 1px red solid; margin-bottom: 3.5px;">
-                    <img src="{{'data:'.$product['type'].';base64,'.base64_encode($product['img'])}}" style="width:296px; height:200px !important;" alt="no_img">
+                    <img src="{{$product['img']}}" style="width:296px; height:200px !important;" alt="no_img">
                 </div>
 
                 <div style="border-bottom: 1px red solid;">

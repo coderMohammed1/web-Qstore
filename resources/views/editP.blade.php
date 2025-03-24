@@ -51,7 +51,7 @@
             <div style="width: 300px; margin-left: 15px; margin-top: 4px; border: 2px blue solid; margin-bottom:7px">
 
                 <div style="border-bottom: 1px red solid; margin-bottom: 3.5px;">
-                    <img src="{{'data:'.$product['type'].';base64,'.base64_encode($product['img'])}}" style="width:296px; height:200px !important;" alt="no_img">
+                    <img src="{{$product['img']}}" style="width:296px; height:200px !important;" alt="no_img">
                 </div>
 
                 <div style="border-bottom: 1px red solid;">
@@ -100,7 +100,7 @@
                         <button title="confirm your edit" value="{{$product['ID']}}" style="width:100%; background-color: #21dda6;border: none;height: 24px; padding-bottom:37px" name = "pimg" type = "submit" >Edit the image!</button>
 
                         <label title="pick an image" class="custom-file-upload">
-                            <input required type="file" name="img2" accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff, .tif, .webp, .ico, .heic, .heif, .jfif, .psd, .raw, .eps, .ai, .cdr">
+                            <input required type="file" name="img" accept=".jpg, .jpeg, .png, .gif, .bmp, .tiff, .tif, .webp, .ico, .heic, .heif, .jfif, .psd, .raw, .eps, .ai, .cdr">
                             <i style="font-size:24px" class="fa">&#xf0c6;</i>
                         </label>
 

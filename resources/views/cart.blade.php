@@ -60,7 +60,7 @@
                 <div class="container cont" style="width: 60%; margin-bottom: 3%">
                     <div class="item">
                         <div style="display: flex;">
-                            <img class="img0" src="{{'data:'.$product['type'].';base64,'.base64_encode($product['img'])}}" alt="err">
+                            <img class="img0" src="{{$product['img']}}" alt="err">
                             {{-- {{'data:'.$product['type'].';base64,'.base64_encode($product['img'])}} --}}
                             <div style="margin-left: 5px; width: 100%; display: flex;" class="tits">
                                 <h3 class="tit">{{$product["pname"]}}</h3>
