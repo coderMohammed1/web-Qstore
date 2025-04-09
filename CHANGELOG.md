@@ -1,6 +1,14 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/laravel/compare/v1.0.3...master)
+## [Unreleased](https://github.com/laravel/laravel/compare/v1.0.4...master)
+
+## [v1.0.4](https://github.com/laravel/laravel/compare/v1.0.3...v1.0.4) - 2025-04-09
+
+1- Fixing a security issue
+
+2- Fixing a UI issue in phones
+
+3- Adding a profile page
 
 ## [v1.0.3](https://github.com/laravel/laravel/compare/v1.0.2...v1.0.3) - 2025-03-15
 
