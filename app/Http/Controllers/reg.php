@@ -33,6 +33,8 @@ class reg extends BaseController
                 $database->beginTransaction(); // start trasction
                 $pattern = '/^[0-9a-zA-Z_@#]+$/';
                 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+
+                $email = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
                 $name =  htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
                 
                 $lname = htmlspecialchars($_POST['lname'], ENT_QUOTES, 'UTF-8');
@@ -54,6 +56,11 @@ class reg extends BaseController
                 $up = false;
                 $low = false;
                 $num = false;
+
+                if($paslen >= 80){
+                    $database->rollBack();
+                    return view("error")->with("error","password is too long, it must be < 80!"); // to prevent DOS.
+                }
 
                 for ($i = 0; $i < $paslen; $i++) {
                     if (ctype_upper($password2[$i])) {

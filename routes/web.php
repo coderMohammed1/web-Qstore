@@ -69,3 +69,7 @@ Route::post("/resetp","\App\Http\Controllers\\reset@sendmail");
 Route::get("/editProducts","\App\Http\Controllers\\editp@main");
 Route::post("/editProducts","\App\Http\Controllers\\editp@edit");
 Route::post("/editProducts/delete","\App\Http\Controllers\\editp@delete");
+
+//profile
+Route::get("/profile","\App\Http\Controllers\\profile@main");
+Route::post("/profile","\App\Http\Controllers\\profile@update");

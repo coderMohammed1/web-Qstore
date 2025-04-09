@@ -94,4 +94,4 @@ CREATE TABLE mycustomers (
     FOREIGN KEY (sid) REFERENCES users(ID)
 ) AUTO_INCREMENT=1;
 
-select * from cart_products;
+select * from product;

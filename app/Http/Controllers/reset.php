@@ -95,7 +95,7 @@ class reset extends BaseController
                 $low = false;
                 $num = false;
 
-                if($paslen <= 40){
+                if($paslen <= 80){
                     for ($i = 0; $i < $paslen; $i++) {
 
                         if (ctype_upper($_POST["newpass"][$i])) {
@@ -108,7 +108,7 @@ class reset extends BaseController
 
                     }
                 }else{
-                    return view("error")->with("error","Max password length is 40");
+                    return view("error")->with("error","Max password length is 80!");
                 }
 
                 if($low and $up and $num and $paslen >= 8){

@@ -20,7 +20,7 @@
         <form id="sigin" action="/signin" method="post"> 
             @csrf
             <label  class="form-label" for="">Email:</label>
-            <input required type="text"  class="form-control" name="email" id="">
+            <input required type="email"  class="form-control" name="email" id="">
 
             <label  class="form-label" for="">Password:</label>
             <input required  class="form-control" type="password" name="password">
