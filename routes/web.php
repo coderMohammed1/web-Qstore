@@ -73,3 +73,7 @@ Route::post("/editProducts/delete","\App\Http\Controllers\\editp@delete");
 //profile
 Route::get("/profile","\App\Http\Controllers\\profile@main");
 Route::post("/profile","\App\Http\Controllers\\profile@update");
+
+// reviws
+Route::get("/review","\App\Http\Controllers\\review@main");
+Route::post("/review","\App\Http\Controllers\\review@rate");

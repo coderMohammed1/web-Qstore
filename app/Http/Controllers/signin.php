@@ -70,7 +70,7 @@ class signin extends BaseController
                         }
                         
                     }else{
-                        return view("signin")->with("error","this account is not activated yet!");    
+                        return view("signin")->with("error","Email or password is not correct!");  // not activated  
                     }
 
                 }else{

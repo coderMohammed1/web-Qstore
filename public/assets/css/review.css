@@ -1,0 +1,51 @@
+/* this css file is taken from an old project I made, that is why it might contain some crap. But as they say, if it works do not touch it! */
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 70px;
+}
+
+#btn {
+    margin-left: 5px;
+    width: 70px;
+}
+
+#name {
+    font-size: larger;
+    font-weight: 100;
+}
+
+#alert {
+    text-align: center !important;
+    margin-top: 5px;
+}
+
+
+#conta{
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    margin: 0 !important;
+}
+
+#for {
+    width: 95%;
+    display: flex;
+    background-color: white;
+    padding: 5px;
+    margin: 0 !important;
+}
+
+#rateme{
+    width: 35px;
+    margin-right: 2px;
+}
+
+footer {
+    display: flex !important;
+    justify-content: center !important;
+    position: fixed !important;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+}

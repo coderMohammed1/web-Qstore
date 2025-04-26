@@ -41,7 +41,7 @@ class description extends BaseController
                 $updatepd = self::$database->prepare("UPDATE product SET description = :newd WHERE ID = :pid AND seller = :selid");  // AND for IDOR protection
                 $updatepd->bindParam("selid",$_SESSION["info"]->ID);
                 $updatepd->bindParam("pid",$_POST["update"]);
-                $updatepd->bindParam("newd",$_POST["Ndescription"]);
+                $updatepd->bindValue("newd",htmlspecialchars($_POST["Ndescription"], ENT_QUOTES, 'UTF-8'));
 
                 if($updatepd->execute()){
                     return redirect("/editProducts");
@@ -55,8 +55,11 @@ class description extends BaseController
                 $product = self::$database->prepare("SELECT *, product.ID as pid FROM product JOIN users ON product.seller = users.ID AND product.ID = :id");
                 $product->bindParam(":id",$_POST["descr"]);
 
-                if($product->execute()){
-                    return view("description")->with("product",$product->fetchObject());
+                $rating = self::$database->prepare("SELECT AVG(rate) as rating FROM reviews WHERE product_id = :pid");
+                $rating->bindParam("pid",$_POST["descr"]);
+
+                if($product->execute() and $rating->execute()){
+                    return view("description")->with("product",$product->fetchObject())->with("avg",$rating->fetchObject());
                }else{
                    return view("error")->with("error","Somthing went wrong!");
                }

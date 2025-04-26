@@ -53,6 +53,15 @@
                 <p id="des">{{$product->description}}</p>
             @endif
         </div>
+        
+        <br>
+        <div style="text-align: center;">
+            <h2 >Reviews:</h2>
+            <p>{{substr($avg->rating, 0, 4)}}/5</p>
+
+            <a class="btn btn-warning" href="/review?pid={{$product->pid}}">Review the product!</a>
+        </div>
+        <br>
 
         <div style="display: block; align-items: center; text-align: center; width:100%">
             <h2 style="margin: auto">Seller information:</h2>

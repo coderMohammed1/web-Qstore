@@ -93,5 +93,24 @@ CREATE TABLE mycustomers (
     FOREIGN KEY (cust_id) REFERENCES users(ID),
     FOREIGN KEY (sid) REFERENCES users(ID)
 ) AUTO_INCREMENT=1;
+--------------------------------------------------
+-- reviews table
+CREATE TABLE reviews(
+	ID INT PRIMARY KEY AUTO_INCREMENT,
+    review TEXT NOT NULL,
+    rate INT NOT NULL,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL
+);
 
-select * from product;
+ALTER TABLE reviews
+ADD CONSTRAINT fk_revU
+FOREIGN KEY (user_id) REFERENCES users(ID);
+
+ALTER TABLE reviews
+ADD CONSTRAINT fk_revP
+FOREIGN KEY (product_id) REFERENCES product(ID);
+
+--------------------------------------------
+
+select * from users;
