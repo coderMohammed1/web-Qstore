@@ -1,6 +1,13 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/laravel/compare/v1.0.4...master)
+## [Unreleased](https://github.com/laravel/laravel/compare/v1.0.5...master)
+
+## [v1.0.5](https://github.com/laravel/laravel/compare/v1.0.4...v1.0.5) - 2025-04-26
+
+### NEW:
+
+1- fixing a bug
+2- products Rating system
 
 ## [v1.0.4](https://github.com/laravel/laravel/compare/v1.0.3...v1.0.4) - 2025-04-09
 
