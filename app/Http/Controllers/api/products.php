@@ -28,10 +28,11 @@ class products extends BaseController
         }
 
         function search(Request $request) {
+            $appUrl = config('app.url').'/'; // u can change this from the .env
             if ($request->json('product')) {
                 $result = self::$database->prepare(
                     "SELECT First_Name, Last_name, product.ID as pid, p_name as product_name, 
-                    Manfacturer, description, quantity 
+                    Manfacturer, description, quantity,CONCAT(:app_url, img) AS img 
                     FROM product 
                     JOIN users ON users.ID = seller 
                     WHERE p_name LIKE :product 
@@ -39,6 +40,7 @@ class products extends BaseController
                 );
         
                 $result->bindValue("product", "%" . $request->json('product') . "%");
+                $result->bindParam("app_url",$appUrl);
         
                 if ($result->execute()) {
                     return response()->json($result->fetchAll(PDO::FETCH_ASSOC));

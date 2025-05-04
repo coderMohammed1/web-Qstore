@@ -113,4 +113,4 @@ FOREIGN KEY (product_id) REFERENCES product(ID);
 
 --------------------------------------------
 
-select * from users;
+select * from product;
