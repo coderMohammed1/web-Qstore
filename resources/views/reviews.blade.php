@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="/assets/css/review.css">
     <script src="https://www.google.com/recaptcha/api.js"></script>
+
 </head>
 <body>
     @include("nav")
@@ -25,9 +26,22 @@
                 <p id="conta" class="card-text">{{$rate['review']}}</p>
             </div>
 
-            <div class="card-footer text-muted">
+            <div class="card-footer text-muted" id="rate_box">
                 Rating: {{$rate["rate"]}}/5
-            </div>
+            
+                 @if ($rate["user_id"] == $_SESSION["info"]->ID) {{-- so u only see the delete-button on ur own comments --}}
+                    <form action="/review/delete" method="POST">
+                        @csrf
+                        <button type="submit" name="delp" class="delete-button" value="{{$rate['rvid']}}">
+                            <i style="font-size:24px; color:red; margin-left:5px" class="fa delete-icon">&#xf014;</i>
+                        </button>
+
+                        <input name="prid" type="hidden" value="{{$rate['product_id']}}">
+                    </form>
+                @endif
+
+            </div>            
+
         </div>
     @endforeach
     
@@ -36,7 +50,7 @@
             @csrf
             <input required type="number" title="your rating out of 5" name="rating" id="rateme" max="5" min="0">
             <label for="" style="margin-right: 5px;"> /5</label>
-
+               
             <textarea required style="width:100%;" class="form-control" id="tex" name="post" rows="1" autocomplete="off"></textarea>
             <button class="g-recaptcha btn btn-outline-dark" data-sitekey="{{config('services.recaptcha.site_key')}}" data-callback='onSubmit'  data-action='register' type="submit"  name="rate">Rate</button>
         </form>

@@ -49,3 +49,13 @@ footer {
     padding: 10px;
     background-color: white;
 }
+
+#rate_box{
+    display: flex;
+    align-items: center;  /* virtical */
+    justify-content: center; 
+}
+
+#rate_box button{
+    border: none;
+}

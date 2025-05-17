@@ -28,7 +28,7 @@ class review extends BaseController
     public function main(){
         session_start();
         if (isset($_SESSION["info"]) and $_SESSION["info"]->roles === "c" and isset($_GET["pid"])){
-            $ratingData = self::$database->prepare("SELECT First_Name,review,rate FROM reviews JOIN users
+            $ratingData = self::$database->prepare("SELECT First_Name,review,rate,user_id,product_id,reviews.ID as rvid FROM reviews JOIN users
             ON users.ID = reviews.user_id JOIN product ON reviews.product_id = product.ID  WHERE product_id = :pid");
 
             $ratingData->bindParam("pid",$_GET["pid"]);
@@ -42,6 +42,7 @@ class review extends BaseController
         }
 
     }
+
     //post
     public function rate(){
         session_start();
@@ -91,4 +92,24 @@ class review extends BaseController
         }
     }
 
+    // post
+    public function delete(){
+        session_start();
+        if(isset($_SESSION["info"])){
+            $delp = self::$database->prepare("DELETE FROM reviews WHERE ID = :rid AND user_id = :usid");
+            $delp->bindParam("rid",$_POST["delp"]);
+
+            $delp->bindParam("usid",$_SESSION["info"]->ID);
+            if($delp->execute()){
+                return redirect("/review?pid=".$_POST['prid']);
+            }else{
+                return view("error")->with("error","something went wrong!");
+            }
+
+        }else{
+            return redirect("/signin");
+        }
+    }
+
 }
+

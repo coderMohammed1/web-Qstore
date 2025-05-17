@@ -143,11 +143,11 @@ class reg extends BaseController
                 }
                     
                     $database->rollBack();
-                    return view("signup")->with("error","somthing went wrong!, pleas try again");
+                    return view("signup")->with("error","somthing went wrong! pleas try again");
 
             }catch(\Exception $e){
                 $database->rollBack();
-                return view("signup")->with("error","somthing went wrong!, pleas try again");
+                return view("signup")->with("error","somthing went wrong! pleas try again");
             }
         }
     }

@@ -77,3 +77,4 @@ Route::post("/profile","\App\Http\Controllers\\profile@update");
 // reviws
 Route::get("/review","\App\Http\Controllers\\review@main");
 Route::post("/review","\App\Http\Controllers\\review@rate");
+Route::post("/review/delete","\App\Http\Controllers\\review@delete");
