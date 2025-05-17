@@ -1,6 +1,10 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/laravel/compare/v1.0.5...master)
+## [Unreleased](https://github.com/laravel/laravel/compare/v1.0.6...master)
+
+## [v1.0.6](https://github.com/laravel/laravel/compare/v1.0.5...v1.0.6) - 2025-05-17
+
+Enhancing some features!
 
 ## [v1.0.5](https://github.com/laravel/laravel/compare/v1.0.4...v1.0.5) - 2025-04-26
 
