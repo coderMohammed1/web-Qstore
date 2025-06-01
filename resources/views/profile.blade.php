@@ -24,7 +24,7 @@
             <input value="{{$_SESSION["info"]->First_Name}}" required type="text"  class="form-control" name="fname" id="">
 
             <label for="">Last name</label>
-            <input value="{{$_SESSION["info"]->Last_name}}" required type="text" class="form-control" name="lname" id="">
+            <input value="{{$_SESSION["info"]->Last_Name}}" required type="text" class="form-control" name="lname" id="">
 
             
             <label  class="form-label" for="">Birth data-sitekey:</label>

@@ -75,7 +75,7 @@
 
                 <tr>
                     <td style="border: 1px solid black; padding: 3px;">{{$product->Manfacturer}}</td>
-                    <td style="border: 1px solid black; padding: 3px;">{{$product->First_Name}} {{$product->Last_name}}</td>
+                    <td style="border: 1px solid black; padding: 3px;">{{$product->First_Name}} {{$product->Last_Name}}</td>
                     <td style="border: 1px solid black; padding: 3px;">{{$product->email}}</td>
                 </tr>
 
