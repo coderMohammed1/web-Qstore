@@ -15,3 +15,7 @@ Route::post("/v1/products","\App\Http\Controllers\\api\\products@search");
 // auth
 Route::post("/v1/auth","\App\Http\Controllers\\api\\auth@login");
 Route::get("/v1/verifie","\App\Http\Controllers\\api\\auth@isAuth");
+
+// profile
+Route::get("/v1/profile","\App\Http\Controllers\\api\\profile@main")->middleware(Authorization::class);
+Route::patch("/v1/profile","\App\Http\Controllers\\api\\profile@update")->middleware(Authorization::class);

@@ -50,7 +50,7 @@ class auth extends BaseController
                             'sub' => $user->ID,
                             'email' => $user->email,
                             'firstName' => $user->First_Name,
-                            'lastName' => $user->Last_name,
+                            'lastName' => $user->Last_Name,
                             'role' => $user->roles,
                             'birthDate' => $user->birthdate,  
                             'iat' => time(),        
