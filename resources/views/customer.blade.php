@@ -63,6 +63,26 @@
         @endforeach
         
     </main>
+
+    <footer class="d-flex justify-content-center align-items-center mt-4 mb-3">
+        @php
+            $currentPage = request()->get('page', 1);
+            $prevPage = $currentPage > 1 ? $currentPage - 1 : 1;
+            $nextPage = $currentPage + 1;
+        @endphp
+
+        <!-- Previous arrow -->
+        <a href="?page={{ $prevPage }}" class="btn btn-outline-primary me-2" 
+        @if($currentPage == 1) style="pointer-events: none; opacity: 0.5;" @endif>
+            &larr;
+        </a>
+
+        <!-- Next arrow -->
+        <a href="?page={{ $nextPage }}" class="btn btn-outline-primary ms-2">
+            &rarr;
+        </a>
+     </footer>
+
 </body>
 <script src="/assets/js/customer.js"></script>
 </html>

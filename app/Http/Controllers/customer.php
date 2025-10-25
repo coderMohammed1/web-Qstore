@@ -13,6 +13,7 @@ class customer extends BaseController
     use AuthorizesRequests, ValidatesRequests;
 
     protected static $database;
+    public static $resultsPerpage = 3;
 
     public function __construct()
     {
@@ -30,9 +31,13 @@ class customer extends BaseController
         session_start();
 
         if(isset($_SESSION["info"]) and $_SESSION["info"]->roles == "c"){ 
+            if (!isset($_GET['page'])){$page=1;}else{$page = $_GET['page'];}
+            $data = self::$database->prepare("SELECT img,type,quantity,p_name,price,ID FROM product ORDER BY ID DESC LIMIT :page,:results");
+            $cpage = ($page - 1) * self::$resultsPerpage;
 
-            $data = self::$database->prepare("SELECT img,type,quantity,p_name,price,ID FROM product ORDER BY ID DESC LIMIT 30");
-            
+            $data->bindParam("page", $cpage, PDO::PARAM_INT);
+            $data->bindParam("results", self::$resultsPerpage, PDO::PARAM_INT);
+                        
             if($data->execute()){
                 $results = $data->fetchAll(PDO::FETCH_ASSOC);
                 return view("customer")->with("data",$results);
@@ -51,10 +56,16 @@ class customer extends BaseController
 
             if(isset($_POST["send01"])){
                 $searchv = "%".$_POST["search"]."%";
-              
-                $data = self::$database->prepare("SELECT img,type,p_name,price,ID,quantity FROM product WHERE p_name LIKE :pname OR Manfacturer LIKE :man ORDER BY ID DESC LIMIT 30");
-                $data->bindParam("pname",$searchv);
-                $data->bindParam("man",$searchv);
+                
+                if (!isset($_GET['page'])){$page=1;}else{$page = $_GET['page'];}
+                $data = self::$database->prepare("SELECT img,type,p_name,price,ID,quantity FROM product WHERE p_name LIKE :pname OR Manfacturer LIKE :man ORDER BY ID DESC LIMIT :page,:results");
+                $data->bindParam("pname",$searchv); // it looks like that we need some js for this as it does not work as expcted.
+                $data->bindParam("man",$searchv); // hmmm innosoft has failed me ); why?!
+
+                $cpage = ($page - 1) * self::$resultsPerpage;
+
+                $data->bindParam("page", $cpage, PDO::PARAM_INT);
+                $data->bindParam("results", self::$resultsPerpage, PDO::PARAM_INT);
 
                 if($data->execute()){
                     $results = $data->fetchAll(PDO::FETCH_ASSOC);
@@ -83,7 +94,7 @@ class customer extends BaseController
                         $row = $pqu->fetch(PDO::FETCH_ASSOC);
                         $quant = $row["quantity"];
 
-                        if($quant <= 0){ // TODO:: test this more
+                        if($quant <= 0){ // test this more
                             self::$database->rollBack();
                             return view("error")->with("error","this product is not available!");
                         }

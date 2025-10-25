@@ -64,7 +64,7 @@ class profile extends BaseController
         ]); // No Mass Assignment or SQLI with this guy!
 
         if (empty($validatedData)) {
-            return response()->json(['error' => 'No valid data provided',"usage" => "You can only update one or some of the following:First_Name,Last_Name,birthdate"], 400);
+            return response()->json(['error' => 'No valid data provided',"usage" => "You can only update all or some of the following:First_Name,Last_Name,birthdate"], 400);
         }
 
         $setParts = [];
