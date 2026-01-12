@@ -267,7 +267,7 @@ class cart extends BaseController
                 return "error";
             }
 
-            if(isset($_POST["number"]) and $_POST["number"] > 1 and is_int($_POST["number"]) and $_POST["number"] <= $quant){ 
+            if(isset($_POST["number"]) and $_POST["number"] >= 1 and is_int($_POST["number"]) and $_POST["number"] <= $quant){ 
                 
                 try{
                     $controlQ = self::$database->prepare("UPDATE cart_products SET quantity = :quant WHERE ID = :pid AND cart = :cart");
